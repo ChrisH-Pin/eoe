@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#09090b">
+    <title>EOE Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --bg:#09090b;--bg2:#111114;--bg3:#18181b;--card:#131316;--card2:#1c1c21;
+            --border:#27272a;--border2:#3f3f46;--text:#fafafa;--text2:#a1a1aa;--text3:#52525b;
+            --green:#22c55e;--greenA:rgba(34,197,94,.1);--greenA2:rgba(34,197,94,.2);
+            --red:#ef4444;--redA:rgba(239,68,68,.08);
+            --orange:#f59e0b;--orangeA:rgba(245,158,11,.08);
+            --blue:#3b82f6;--blueA:rgba(59,130,246,.08);
+            --purple:#a855f7;--purpleA:rgba(168,85,247,.08);
+            --r:14px;--rs:10px;--rr:8px;
+        }
+        body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+        .app{max-width:500px;margin:0 auto;padding:0 16px 110px}
+
+        .hdr{position:sticky;top:0;z-index:100;background:rgba(9,9,11,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:14px 0 10px}
+        .hdr-row{display:flex;justify-content:space-between;align-items:center}
+        .hdr h1{font-size:18px;font-weight:700;letter-spacing:-.3px}
+        .hdr-right{display:flex;align-items:center;gap:8px}
+        .backup-pill{font-size:9px;padding:4px 8px;border-radius:12px;font-weight:600;cursor:pointer}
+        .bp-ok{background:var(--greenA);color:var(--green)}
+        .bp-warn{background:var(--orangeA);color:var(--orange);animation:blink 2s infinite}
+        @keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
+
+        .phase-strip{margin-top:8px;padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);display:flex;align-items:center;gap:8px}
+        .phase-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0}
+        @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+        .phase-strip-text{font-size:11px;color:var(--text2);flex:1}
+        .phase-strip-text strong{color:var(--text);font-weight:600}
+        .phase-strip-pct{font-size:11px;font-weight:700;color:var(--green)}
+
+        .nav{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(9,9,11,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:6px 16px;padding-bottom:max(8px,env(safe-area-inset-bottom))}
+        .nav-inner{display:flex;gap:2px;max-width:500px;margin:0 auto}
+        .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border:none;background:none;color:var(--text3);font-size:9px;font-weight:500;font-family:inherit;cursor:pointer;border-radius:var(--rs);transition:.2s}
+        .nav-btn.active{color:var(--green)}
+        .nav-ico{font-size:18px}
+        .nav-badge{width:6px;height:6px;background:var(--red);border-radius:50%;position:absolute;top:4px;right:30%;display:none}
+        .nav-badge.vis{display:block}
+
+        .card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px}
+        .card-h{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:12px}
+        .card-h2{font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px}
+
+        .inp{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--rr);font-size:13px;font-family:inherit;color:var(--text);background:var(--bg2);outline:none;transition:.2s}
+        .inp:focus{border-color:var(--green);box-shadow:0 0 0 3px var(--greenA)}
+        .inp-sm{font-size:12px;padding:8px 10px}
+        textarea.inp{resize:vertical;min-height:44px}
+        select.inp{appearance:none;cursor:pointer}
+
+        .btn{padding:12px 16px;border:none;border-radius:var(--rs);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:.15s;width:100%;text-align:center}
+        .btn:active{transform:scale(.98)}
+        .btn-p{background:var(--green);color:#000}
+        .btn-s{background:transparent;color:var(--green);border:1.5px solid var(--green)}
+        .btn-g{background:transparent;color:var(--text3);border:1.5px solid var(--border)}
+        .btn-d{background:transparent;color:var(--red);border:1.5px solid rgba(239,68,68,.3)}
+        .btn-sm{padding:8px 12px;font-size:11px;width:auto}
+        .btn:disabled{opacity:.35;cursor:not-allowed}
+
+        /* Meal blocks */
+        .meal{padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:8px}
+        .meal.has-data{border-color:var(--border2)}
+        .meal-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+        .meal-label{font-size:11px;font-weight:600;color:var(--text2)}
+        .meal-badges{display:flex;gap:4px}
+        .meal-badge{font-size:9px;padding:3px 7px;border-radius:10px;font-weight:600;cursor:pointer;border:1px solid var(--border);color:var(--text3);background:var(--bg);transition:.15s;user-select:none}
+        .meal-badge.active-test{background:var(--greenA);color:var(--green);border-color:var(--green)}
+        .meal-badge.active-proc{background:var(--orangeA);color:var(--orange);border-color:var(--orange)}
+        .meal-inp{width:100%;padding:7px 0;border:none;background:none;font-size:13px;font-family:inherit;color:var(--text);outline:none;border-bottom:1px solid var(--border)}
+        .meal-inp:focus{border-bottom-color:var(--green)}
+        .meal-inp::placeholder{color:var(--text3)}
+
+        /* OCR section per meal */
+        .ocr-list{margin-top:8px}
+        .ocr-item{display:flex;gap:6px;align-items:center;padding:6px 8px;background:var(--bg);border:1px solid var(--border);border-radius:var(--rr);margin-bottom:4px;font-size:11px;color:var(--text2)}
+        .ocr-item-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .ocr-item-del{background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px 4px}
+        .ocr-add-btn{display:flex;align-items:center;justify-content:center;gap:4px;padding:8px;border:1.5px dashed var(--border);border-radius:var(--rr);background:none;font-size:11px;color:var(--text3);cursor:pointer;width:100%;font-family:inherit;transition:.15s;margin-top:6px;position:relative;overflow:hidden}
+        .ocr-add-btn:active{border-color:var(--green);color:var(--green)}
+        .ocr-add-btn input{position:absolute;inset:0;opacity:0;cursor:pointer}
+
+        /* Check-in */
+        .ci-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+        .ci-row:last-child{border-bottom:none}
+        .ci-label{font-size:12px;color:var(--text2);flex:1}
+        .emoji-row{display:flex;gap:3px}
+        .emo-btn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
+        .emo-btn.active{border-color:var(--green);background:var(--greenA);box-shadow:0 0 10px var(--greenA)}
+        .counter{display:flex;align-items:center;gap:8px}
+        .c-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg2);color:var(--text);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:.15s}
+        .c-btn:active{border-color:var(--green);background:var(--greenA)}
+        .c-val{font-size:15px;font-weight:700;min-width:18px;text-align:center}
+        .tex-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+        .tex-chip{padding:5px 10px;border:1.5px solid var(--border);border-radius:16px;font-size:10px;font-weight:500;color:var(--text3);cursor:pointer;transition:.15s;background:var(--bg2);user-select:none}
+        .tex-chip.active{background:var(--greenA);color:var(--green);border-color:var(--green)}
+
+        /* Alert banner */
+        .alert{padding:12px 14px;border-radius:var(--rs);margin-bottom:10px;display:none}
+        .alert.vis{display:block}
+        .alert-warn{background:var(--orangeA);border:1px solid rgba(245,158,11,.2)}
+        .alert-bad{background:var(--redA);border:1px solid rgba(239,68,68,.2)}
+        .alert-title{font-size:12px;font-weight:600;margin-bottom:4px}
+        .alert-warn .alert-title{color:var(--orange)}
+        .alert-bad .alert-title{color:var(--red)}
+        .alert-text{font-size:11px;color:var(--text2);line-height:1.4}
+        .alert-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+        .alert-btn{padding:7px 12px;border-radius:var(--rr);font-size:10px;font-weight:600;cursor:pointer;border:1.5px solid;font-family:inherit}
+        .alert-btn-red{border-color:var(--red);color:var(--red);background:var(--redA)}
+        .alert-btn-orange{border-color:var(--orange);color:var(--orange);background:var(--orangeA)}
+        .alert-btn-gray{border-color:var(--border);color:var(--text2);background:var(--bg2)}
+
+        /* Food bank */
+        .fb-section{margin-bottom:16px}
+        .fb-section-h{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--text3);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+        .fb-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:6px;transition:.15s}
+        .fb-item:active{background:var(--card2)}
+        .fb-ico{font-size:18px;flex-shrink:0}
+        .fb-info{flex:1;min-width:0}
+        .fb-name{font-size:13px;font-weight:600}
+        .fb-detail{font-size:10px;color:var(--text3);margin-top:1px}
+        .fb-actions{display:flex;gap:4px}
+        .fb-act{padding:5px 8px;border-radius:6px;font-size:10px;font-weight:600;border:1px solid var(--border);background:var(--bg);color:var(--text3);cursor:pointer;font-family:inherit;transition:.15s}
+        .fb-act:active{border-color:var(--green);color:var(--green)}
+        .fb-active .fb-name{color:var(--green)}
+        .fb-safe .fb-name{color:var(--green)}
+        .fb-trigger .fb-name{color:var(--red)}
+        .fb-unclear .fb-name{color:var(--orange)}
+        .fb-recovery .fb-name{color:var(--purple)}
+
+        /* Timeline */
+        .timeline{position:relative;padding-left:20px;margin-top:12px}
+        .timeline::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:2px;background:var(--border)}
+        .tl-item{position:relative;padding-bottom:16px}
+        .tl-item:last-child{padding-bottom:0}
+        .tl-dot{position:absolute;left:-17px;top:2px;width:12px;height:12px;border-radius:50%;border:2px solid var(--border);background:var(--bg)}
+        .tl-dot.green{background:var(--green);border-color:var(--green)}
+        .tl-dot.red{background:var(--red);border-color:var(--red)}
+        .tl-dot.orange{background:var(--orange);border-color:var(--orange)}
+        .tl-dot.purple{background:var(--purple);border-color:var(--purple)}
+        .tl-dot.blue{background:var(--blue);border-color:var(--blue)}
+        .tl-dot.pulse{animation:pulse 2s infinite}
+        .tl-title{font-size:12px;font-weight:600}
+        .tl-sub{font-size:10px;color:var(--text3);margin-top:2px}
+        .tl-score{display:inline-block;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700;margin-top:3px}
+        .tl-score.good{background:var(--greenA);color:var(--green)}
+        .tl-score.mid{background:var(--orangeA);color:var(--orange)}
+        .tl-score.bad{background:var(--redA);color:var(--red)}
+
+        /* Trend mini chart */
+        .trend-mini{display:flex;align-items:flex-end;gap:2px;height:50px;margin-top:10px;padding:4px 0}
+        .trend-bar{flex:1;border-radius:2px 2px 0 0;min-height:2px;transition:.3s}
+        .trend-bar.g{background:var(--green)}
+        .trend-bar.o{background:var(--orange)}
+        .trend-bar.r{background:var(--red)}
+        .trend-bar.base{background:var(--border2)}
+
+        /* Config modal */
+        .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);z-index:500;display:none;align-items:flex-end;justify-content:center}
+        .modal-bg.vis{display:flex}
+        .modal{background:var(--card);border:1px solid var(--border);border-radius:16px 16px 0 0;padding:20px;width:100%;max-width:500px;max-height:75vh;overflow-y:auto}
+        .modal-title{font-size:15px;font-weight:700;margin-bottom:6px}
+        .modal-sub{font-size:12px;color:var(--text2);margin-bottom:16px;line-height:1.4}
+        .modal-btns{display:flex;flex-direction:column;gap:8px}
+        .modal-row{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+        .modal-row label{font-size:12px;color:var(--text2);min-width:80px}
+        .modal-row .inp{flex:1}
+
+        /* OCR modal */
+        .ocr-modal-content{margin-top:12px}
+        .ocr-prog{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text2);margin-top:10px}
+        .ocr-spinner{width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .6s linear infinite}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .ocr-bar{height:2px;background:var(--border);border-radius:1px;margin-top:6px;overflow:hidden}
+        .ocr-bar-fill{height:100%;background:var(--green);width:0%;transition:.3s}
+
+        /* Toast */
+        .toast{position:fixed;top:14px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--card2);color:var(--text);padding:10px 18px;border-radius:20px;font-size:12px;font-weight:600;border:1px solid var(--border);box-shadow:0 8px 30px rgba(0,0,0,.6);z-index:1000;transition:transform .35s cubic-bezier(.16,1,.3,1);white-space:nowrap}
+        .toast.show{transform:translateX(-50%) translateY(0)}
+
+        .view{display:none;animation:fadeIn .2s ease}.view.active{display:block}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+        .mt6{margin-top:6px}.mt8{margin-top:8px}.mt10{margin-top:10px}.mt12{margin-top:12px}.mt16{margin-top:16px}
+        .mb6{margin-bottom:6px}.mb8{margin-bottom:8px}.mb10{margin-bottom:10px}.mb12{margin-bottom:12px}
+        .row{display:flex;gap:8px}.flex1{flex:1}
+        .hidden{display:none!important}
+        .sep{height:1px;background:var(--border);margin:12px 0}
+
+        /* Stats grid */
+        .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+        .stat{text-align:center;padding:10px 6px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rr)}
+        .stat-v{font-size:18px;font-weight:700;color:var(--green)}
+        .stat-l{font-size:9px;color:var(--text3);margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+    </style>
+</head>
+<body>
+<div class="app">
+    <div class="toast" id="toast"></div>
+
+    <!-- Modals -->
+    <div class="modal-bg" id="modalBg">
+        <div class="modal" id="modalContent"></div>
+    </div>
+
+    <!-- Header -->
+    <div class="hdr">
+        <div class="hdr-row">
+            <h1>EOE Tracker</h1>
+            <div class="hdr-right">
+                <span class="backup-pill bp-ok" id="backupPill" onclick="switchView('more')">Backup OK</span>
+            </div>
+        </div>
+        <div class="phase-strip" id="phaseStrip">
+            <div class="phase-dot"></div>
+            <div class="phase-strip-text" id="phaseStripText"><strong>Keine Phase aktiv</strong></div>
+            <div class="phase-strip-pct" id="phaseStripPct"></div>
+        </div>
+    </div>
+
+    <!-- Smart Alert -->
+    <div class="alert alert-warn" id="alertBanner">
+        <div class="alert-title" id="alertTitle">⚠️ Symptome steigen</div>
+        <div class="alert-text" id="alertText"></div>
+        <div class="alert-actions" id="alertActions"></div>
+    </div>
+
+    <!-- === TODAY === -->
+    <div class="view active" id="view-today">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+            <input type="date" class="inp inp-sm" id="todayDate" style="flex:1">
+            <span style="font-size:11px;color:var(--text3)" id="todayLabel"></span>
+        </div>
+
+        <div class="card">
+            <div class="card-h">🍽 Mahlzeiten</div>
+            <div id="mealsBox"></div>
+        </div>
+
+        <div class="card">
+            <div class="card-h">🌙 Tages-Check-in</div>
+            <div class="ci-row">
+                <span class="ci-label">Schlucken</span>
+                <div class="emoji-row" id="swallowRow"></div>
+            </div>
+            <div class="ci-row">
+                <span class="ci-label">Bolus-Events</span>
+                <div class="counter"><button class="c-btn" onclick="adj('bolus',-1)">−</button><span class="c-val" id="bolusV">0</span><button class="c-btn" onclick="adj('bolus',1)">+</button></div>
+            </div>
+            <div class="ci-row">
+                <span class="ci-label">Schmerz (0-10)</span>
+                <div class="counter"><button class="c-btn" onclick="adj('pain',-1)">−</button><span class="c-val" id="painV">0</span><button class="c-btn" onclick="adj('pain',1)">+</button></div>
+            </div>
+            <div class="ci-row" style="flex-direction:column;align-items:flex-start">
+                <span class="ci-label mb6">Schwierige Texturen</span>
+                <div class="tex-chips" id="texChips"></div>
+            </div>
+            <div class="ci-row" style="flex-direction:column;align-items:flex-start">
+                <span class="ci-label mb6">Vermiedene Nahrung</span>
+                <input class="inp inp-sm" id="avoided" placeholder="z.B. Brot, trockenes Fleisch...">
+            </div>
+            <div class="ci-row" style="flex-direction:column;align-items:flex-start">
+                <span class="ci-label mb6">Medikamente</span>
+                <input class="inp inp-sm" id="meds" placeholder="z.B. PPI 40mg">
+            </div>
+            <div class="ci-row" style="flex-direction:column;align-items:flex-start;border-bottom:none">
+                <span class="ci-label mb6">Notiz</span>
+                <textarea class="inp inp-sm" id="notes" rows="2" placeholder="Kurze Tagesnotiz..."></textarea>
+            </div>
+        </div>
+
+        <button class="btn btn-p" onclick="saveDay()">Tag speichern</button>
+    </div>
+
+    <!-- === FOOD BANK === -->
+    <div class="view" id="view-bank">
+        <div class="card">
+            <div class="card-h">🎯 Food Bank</div>
+            <div style="font-size:11px;color:var(--text2);margin-bottom:12px">Verwalte deine Lebensmittel-Tests. Verschiebe Items zwischen Kategorien.</div>
+            <div id="bankContainer"></div>
+            <button class="btn btn-g mt10" onclick="showAddFoodModal()">+ Lebensmittel hinzufügen</button>
+        </div>
+    </div>
+
+    <!-- === JOURNEY === -->
+    <div class="view" id="view-journey">
+        <div class="card">
+            <div class="card-h">📈 Aktuelle Phase</div>
+            <div id="journeyPhaseInfo">Keine Phase aktiv</div>
+            <div class="trend-mini" id="trendChart"></div>
+            <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);margin-top:4px">
+                <span>Baseline</span><span>Aktuell</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-h">🗺 Meine EOE-Reise</div>
+            <div class="timeline" id="timelineBox"></div>
+        </div>
+
+        <div class="card">
+            <div class="card-h">📊 Compliance diese Woche</div>
+            <div style="display:flex;gap:4px" id="compDots"></div>
+            <div style="font-size:10px;color:var(--text3);margin-top:6px" id="compHint"></div>
+        </div>
+    </div>
+
+    <!-- === MORE === -->
+    <div class="view" id="view-more">
+        <div class="card">
+            <div class="card-h">💾 Backup & Export</div>
+            <div style="font-size:11px;color:var(--text2);margin-bottom:10px" id="backupInfo">Letztes Backup: Nie</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+                <button class="btn btn-p" onclick="doBackup()">Backup herunterladen (JSON)</button>
+                <button class="btn btn-s" onclick="exportCSV()">CSV Export für KI-Analyse</button>
+                <button class="btn btn-g" onclick="document.getElementById('importF').click()">📥 Backup importieren</button>
+                <input type="file" id="importF" accept=".json" style="display:none" onchange="handleImport(event)">
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-h">📊 Statistiken</div>
+            <div class="stats" id="statsGrid"></div>
+        </div>
+        <div class="card">
+            <div class="card-h">🎯 Trigger-Profil</div>
+            <div id="triggerProfile"></div>
+        </div>
+        <div class="card">
+            <div class="card-h">⚠️ Gefahrenzone</div>
+            <button class="btn btn-d" onclick="clearAll()">Alle Daten löschen</button>
+        </div>
+    </div>
+</div>
+
+<div class="nav">
+    <div class="nav-inner">
+        <button class="nav-btn active" onclick="switchView('today')" id="nav-today"><span class="nav-ico">📝</span>Heute</button>
+        <button class="nav-btn" onclick="switchView('bank')" id="nav-bank"><span class="nav-ico">🎯</span>Foods</button>
+        <button class="nav-btn" onclick="switchView('journey')" id="nav-journey"><span class="nav-ico">📈</span>Journey</button>
+        <button class="nav-btn" onclick="switchView('more')" id="nav-more"><span class="nav-ico">⚙️</span>Mehr</button>
+    </div>
+</div>
+
+<script>
+// ============ DATA ============
+const TEXTURES=['Trockenes Fleisch','Brot/Toast','Reis','Rohes Gemüse','Tabletten','Pasta','Nüsse','Chips'];
+const SWALLOW=[{v:1,e:'😊',l:'Gut'},{v:2,e:'😐',l:'OK'},{v:3,e:'😟',l:'Schwer'},{v:4,e:'😫',l:'Sehr schwer'}];
+const MEALS=[{k:'breakfast',l:'Frühstück'},{k:'lunch',l:'Mittagessen'},{k:'dinner',l:'Abendessen'},{k:'snack',l:'Snack'}];
+const DEFAULT_FOODS=[
+    {id:'dairy',name:'Milchprodukte',icon:'🥛'},
+    {id:'wheat',name:'Weizen',icon:'🌾'},
+    {id:'egg',name:'Ei',icon:'🥚'},
+    {id:'soy',name:'Soja',icon:'🫘'},
+    {id:'nuts',name:'Nüsse',icon:'🥜'},
+    {id:'fish',name:'Fisch/Meeresfrüchte',icon:'🐟'},
+    {id:'legumes',name:'Hülsenfrüchte',icon:'🫛'}
+];
+const WEEKDAYS=['Mo','Di','Mi','Do','Fr','Sa','So'];
+
+let D={days:[],foods:[],phases:[],currentPhase:null,meta:{lastBackup:null,sinceBackup:0}};
+let today={swallowing:0,bolus:0,pain:0,textures:[],meals:{},avoided:'',meds:'',notes:''};
+let ocrQueue=[];
+
+// ============ INIT ============
+function init(){
+    load();
+    if(!D.foods.length) D.foods=DEFAULT_FOODS.map(f=>({...f,status:'queue'}));
+    const dateEl=document.getElementById('todayDate');
+    dateEl.value=new Date().toISOString().split('T')[0];
+    dateEl.addEventListener('change',loadDay);
+    renderMeals();
+    renderSwallow();
+    renderTextures();
+    loadDay();
+    updateAll();
+}
+function load(){try{const s=localStorage.getItem('eoe3');if(s)D=JSON.parse(s);}catch(e){}}
+function save(){try{localStorage.setItem('eoe3',JSON.stringify(D));}catch(e){showToast('⚠️ Speicherfehler');}}
+
+// ============ NAV ============
+function switchView(v){
+    document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(el=>el.classList.remove('active'));
+    document.getElementById('view-'+v).classList.add('active');
+    document.getElementById('nav-'+v).classList.add('active');
+    if(v==='bank')renderBank();
+    if(v==='journey')renderJourney();
+    if(v==='more')renderMore();
+}
+
+// ============ TODAY ============
+function renderMeals(){
+    const c=document.getElementById('mealsBox');
+    c.innerHTML='';
+    MEALS.forEach(m=>{
+        const d=document.createElement('div');d.className='meal';d.id='meal-'+m.k;
+        d.innerHTML='<div class="meal-top"><span class="meal-label">'+m.l+'</span><div class="meal-badges">'+
+            '<span class="meal-badge" id="tb-'+m.k+'" onclick="toggleTag(\''+m.k+'\',\'test\')">🧪 Test</span>'+
+            '<span class="meal-badge" id="pb-'+m.k+'" onclick="toggleTag(\''+m.k+'\',\'proc\')">🏭</span>'+
+            '</div></div>'+
+            '<input class="meal-inp" id="mi-'+m.k+'" placeholder="Was hast du gegessen?" oninput="mealInput(\''+m.k+'\')">'+
+            '<div class="ocr-list" id="ocr-list-'+m.k+'"></div>'+
+            '<div class="ocr-add-btn hidden" id="ocr-btn-'+m.k+'"><input type="file" accept="image/*" capture="environment" onchange="startOCR(event,\''+m.k+'\')">📷 Zutatenliste scannen</div>';
+        c.appendChild(d);
+    });
+}
+function mealInput(k){today.meals[k]=today.meals[k]||{};today.meals[k].foods=document.getElementById('mi-'+k).value;document.getElementById('meal-'+k).classList.toggle('has-data',!!today.meals[k].foods);}
+function toggleTag(k,type){
+    today.meals[k]=today.meals[k]||{};
+    if(type==='test'){today.meals[k].isTest=!today.meals[k].isTest;document.getElementById('tb-'+k).classList.toggle('active-test',today.meals[k].isTest);}
+    if(type==='proc'){today.meals[k].isProc=!today.meals[k].isProc;document.getElementById('pb-'+k).classList.toggle('active-proc',today.meals[k].isProc);document.getElementById('ocr-btn-'+k).classList.toggle('hidden',!today.meals[k].isProc);}
+}
+
+// OCR per meal
+function startOCR(event,mealKey){
+    const file=event.target.files&&event.target.files[0];if(!file)return;
+    event.target.value='';
+    showModal('ocrProgress');
+    const reader=new FileReader();
+    reader.onloadend=()=>runOCR(reader.result,mealKey);
+    reader.readAsDataURL(file);
+}
+async function runOCR(img,mealKey){
+    const fill=document.getElementById('ocrModalBar');
+    const txt=document.getElementById('ocrModalStatus');
+    try{
+        const r=await Tesseract.recognize(img,'deu+eng',{logger:m=>{
+            if(m.status==='recognizing text'){const p=Math.round(m.progress*100);if(fill)fill.style.width=p+'%';if(txt)txt.textContent='Erkenne: '+p+'%';}
+        }});
+        closeModal();
+        const text=r.data.text.trim();
+        // Ask for product name
+        showOCRResultModal(text,mealKey);
+    }catch(e){closeModal();showToast('❌ OCR fehlgeschlagen');}
+}
+function showOCRResultModal(text,mealKey){
+    document.getElementById('modalContent').innerHTML='<div class="modal-title">📷 Text erkannt</div><div class="modal-sub">Korrigiere bei Bedarf:</div>'+
+        '<input class="inp inp-sm mb8" id="ocrProdName" placeholder="Produktname (z.B. Schär Brot)">'+
+        '<textarea class="inp inp-sm" id="ocrResultText" rows="5">'+escHtml(text)+'</textarea>'+
+        '<div class="modal-btns mt12"><button class="btn btn-p" onclick="saveOCR(\''+mealKey+'\')">Speichern</button><button class="btn btn-g" onclick="closeModal()">Abbrechen</button></div>';
+    document.getElementById('modalBg').classList.add('vis');
+}
+function saveOCR(mealKey){
+    const name=document.getElementById('ocrProdName').value||'Produkt';
+    const text=document.getElementById('ocrResultText').value;
+    today.meals[mealKey]=today.meals[mealKey]||{};
+    today.meals[mealKey].ocrItems=today.meals[mealKey].ocrItems||[];
+    today.meals[mealKey].ocrItems.push({name:name,text:text});
+    closeModal();
+    renderOCRList(mealKey);
+    showToast('✅ Zutatenliste gespeichert');
+}
+function renderOCRList(mealKey){
+    const c=document.getElementById('ocr-list-'+mealKey);
+    const items=(today.meals[mealKey]&&today.meals[mealKey].ocrItems)||[];
+    c.innerHTML=items.map((item,i)=>'<div class="ocr-item"><span class="ocr-item-name">📋 '+escHtml(item.name)+'</span><button class="ocr-item-del" onclick="delOCR(\''+mealKey+'\','+i+')">✕</button></div>').join('');
+}
+function delOCR(mealKey,idx){
+    today.meals[mealKey].ocrItems.splice(idx,1);
+    renderOCRList(mealKey);
+}
+
+function renderSwallow(){
+    const c=document.getElementById('swallowRow');c.innerHTML='';
+    SWALLOW.forEach(s=>{const b=document.createElement('button');b.className='emo-btn';b.textContent=s.e;b.title=s.l;b.onclick=()=>{today.swallowing=s.v;c.querySelectorAll('.emo-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');};c.appendChild(b);});
+}
+function renderTextures(){
+    const c=document.getElementById('texChips');c.innerHTML='';
+    TEXTURES.forEach(t=>{const b=document.createElement('button');b.className='tex-chip';b.textContent=t;b.onclick=()=>{const i=today.textures.indexOf(t);if(i>-1){today.textures.splice(i,1);b.classList.remove('active');}else{today.textures.push(t);b.classList.add('active');}};c.appendChild(b);});
+}
+function adj(key,d){today[key]=Math.max(0,Math.min(key==='pain'?10:20,(today[key]||0)+d));document.getElementById(key+'V').textContent=today[key];}
+
+function loadDay(){
+    const date=document.getElementById('todayDate').value;
+    const d=new Date(date+'T12:00:00');
+    const days=['So','Mo','Di','Mi','Do','Fr','Sa'];
+    document.getElementById('todayLabel').textContent=days[d.getDay()]+', '+d.toLocaleDateString('de-DE');
+    const existing=D.days.find(x=>x.date===date);
+    if(existing){today=JSON.parse(JSON.stringify(existing));}else{today={swallowing:0,bolus:0,pain:0,textures:[],meals:{},avoided:'',meds:'',notes:''};}
+    populateForm();
+}
+function populateForm(){
+    MEALS.forEach(m=>{
+        const md=today.meals[m.k]||{};
+        document.getElementById('mi-'+m.k).value=md.foods||'';
+        document.getElementById('meal-'+m.k).classList.toggle('has-data',!!(md.foods));
+        document.getElementById('tb-'+m.k).classList.toggle('active-test',!!md.isTest);
+        document.getElementById('pb-'+m.k).classList.toggle('active-proc',!!md.isProc);
+        document.getElementById('ocr-btn-'+m.k).classList.toggle('hidden',!md.isProc);
+        renderOCRList(m.k);
+    });
+    document.querySelectorAll('#swallowRow .emo-btn').forEach((b,i)=>b.classList.toggle('active',SWALLOW[i].v===today.swallowing));
+    document.getElementById('bolusV').textContent=today.bolus||0;
+    document.getElementById('painV').textContent=today.pain||0;
+    document.querySelectorAll('#texChips .tex-chip').forEach(b=>b.classList.toggle('active',(today.textures||[]).includes(b.textContent)));
+    document.getElementById('avoided').value=today.avoided||'';
+    document.getElementById('meds').value=today.meds||'';
+    document.getElementById('notes').value=today.notes||'';
+}
+
+function saveDay(){
+    const date=document.getElementById('todayDate').value;if(!date)return;
+    today.date=date;
+    today.avoided=document.getElementById('avoided').value;
+    today.meds=document.getElementById('meds').value;
+    today.notes=document.getElementById('notes').value;
+    today.phase=D.currentPhase?D.currentPhase.name:'none';
+    today.score=calcScore(today);
+
+    const idx=D.days.findIndex(x=>x.date===date);
+    if(idx>-1)D.days[idx]=JSON.parse(JSON.stringify(today));
+    else D.days.push(JSON.parse(JSON.stringify(today)));
+    D.days.sort((a,b)=>a.date.localeCompare(b.date));
+    D.meta.sinceBackup++;
+    save();
+    showToast('✓ Gespeichert');
+    updateAll();
+    checkAlert();
+    if(D.meta.sinceBackup>=5)setTimeout(()=>showBackupReminder(),600);
+}
+function calcScore(d){
+    let s=0;
+    s+=(Math.max(0,(d.swallowing||1)-1))*2;
+    s+=Math.min((d.bolus||0)*2,4);
+    s+=Math.min(d.pain||0,4);
+    s+=Math.min((d.textures||[]).length*0.5,2);
+    return Math.min(10,Math.round(s*10)/10);
+}
+
+// ============ ALERTS ============
+function checkAlert(){
+    if(!D.currentPhase)return;
+    const phaseDays=D.days.filter(x=>x.phase===D.currentPhase.name&&x.score!==undefined).slice(-7);
+    if(phaseDays.length<3)return;
+    const recent3=phaseDays.slice(-3);
+    const avg=recent3.reduce((a,b)=>a+b.score,0)/recent3.length;
+    const baseline=getBaselineAvg();
+    const diff=avg-baseline;
+
+    const banner=document.getElementById('alertBanner');
+    if(diff>2){
+        banner.className='alert alert-bad vis';
+        document.getElementById('alertTitle').textContent='🚨 Deutliche Verschlechterung';
+        document.getElementById('alertText').textContent='Dein Score ist '+diff.toFixed(1)+' Punkte über der Baseline (⌀ '+avg.toFixed(1)+' vs. '+baseline.toFixed(1)+'). Möglicherweise ist '+D.currentPhase.name.replace('-Reintroduktion','')+' ein Trigger.';
+        document.getElementById('alertActions').innerHTML='<button class="alert-btn alert-btn-red" onclick="abortPhase()">Phase abbrechen</button><button class="alert-btn alert-btn-orange" onclick="endPhaseAs(\'unclear\')">Als unklar beenden</button><button class="alert-btn alert-btn-gray" onclick="dismissAlert()">Weiter beobachten</button>';
+    }else if(diff>1){
+        banner.className='alert alert-warn vis';
+        document.getElementById('alertTitle').textContent='⚠️ Symptome steigen leicht';
+        document.getElementById('alertText').textContent='Score ⌀ '+avg.toFixed(1)+' (Baseline: '+baseline.toFixed(1)+'). Beobachte die nächsten Tage.';
+        document.getElementById('alertActions').innerHTML='<button class="alert-btn alert-btn-gray" onclick="dismissAlert()">OK, beobachte weiter</button>';
+    }else{
+        banner.className='alert';
+    }
+}
+function dismissAlert(){document.getElementById('alertBanner').className='alert';}
+function getBaselineAvg(){
+    const bl=D.days.filter(x=>(x.phase==='Elimination (Baseline)'||x.phase==='Recovery')&&x.score!==undefined);
+    return bl.length?(bl.reduce((a,b)=>a+b.score,0)/bl.length):1;
+}
+function abortPhase(){
+    if(!confirm('Phase abbrechen und '+D.currentPhase.name.replace('-Reintroduktion','')+' als TRIGGER markieren?'))return;
+    endPhaseAs('trigger');
+    // Start recovery
+    D.currentPhase={name:'Recovery',startDate:new Date().toISOString().split('T')[0],durationWeeks:4,recoveryFrom:D.phases[D.phases.length-1].name};
+    // Mark food as trigger
+    const food=D.foods.find(f=>D.phases[D.phases.length-1].name.includes(f.name));
+    if(food)food.status='trigger';
+    save();updateAll();dismissAlert();
+    showToast('Phase abgebrochen → Recovery gestartet');
+}
+
+// ============ FOOD BANK ============
+function renderBank(){
+    const c=document.getElementById('bankContainer');
+    const groups=[
+        {status:'active',label:'🔬 TESTE ICH GERADE',cls:'fb-active'},
+        {status:'recovery',label:'🔄 RECOVERY',cls:'fb-recovery'},
+        {status:'queue',label:'📋 WILL ICH TESTEN',cls:''},
+        {status:'skipped',label:'⏸️ ÜBERSPRUNGEN',cls:''},
+        {status:'safe',label:'✅ SAFE',cls:'fb-safe'},
+        {status:'trigger',label:'❌ TRIGGER',cls:'fb-trigger'},
+        {status:'unclear',label:'❓ UNKLAR / NOCHMAL',cls:'fb-unclear'}
+    ];
+    let html='';
+    groups.forEach(g=>{
+        const items=D.foods.filter(f=>f.status===g.status);
+        if(!items.length&&g.status!=='active'&&g.status!=='queue')return;
+        html+='<div class="fb-section"><div class="fb-section-h">'+g.label+' ('+items.length+')</div>';
+        items.forEach(f=>{
+            html+='<div class="fb-item '+g.cls+'"><span class="fb-ico">'+f.icon+'</span><div class="fb-info"><div class="fb-name">'+escHtml(f.name)+'</div><div class="fb-detail">'+getFoodDetail(f)+'</div></div><div class="fb-actions">'+getFoodActions(f)+'</div></div>';
+        });
+        if(!items.length)html+='<div style="font-size:11px;color:var(--text3);padding:8px 0">Leer</div>';
+        html+='</div>';
+    });
+    c.innerHTML=html;
+}
+function getFoodDetail(f){
+    if(f.status==='active'&&D.currentPhase&&D.currentPhase.name.includes(f.name)){
+        const days=daysSince(D.currentPhase.startDate);
+        return 'Tag '+days+' / '+(D.currentPhase.durationWeeks*7);
+    }
+    const phase=D.phases.find(p=>p.name.includes(f.name));
+    if(phase)return phase.result==='safe'?'✅ Kein Trigger':'❌ Trigger · ⌀ '+(phase.avgScore||'–');
+    if(f.status==='skipped'&&f.skipReason)return f.skipReason;
+    return '';
+}
+function getFoodActions(f){
+    switch(f.status){
+        case 'queue':return '<button class="fb-act" onclick="startPhaseFor(\''+f.id+'\')">Starten</button><button class="fb-act" onclick="skipFood(\''+f.id+'\')">Skip</button>';
+        case 'skipped':return '<button class="fb-act" onclick="unskipFood(\''+f.id+'\')">Zurück</button>';
+        case 'active':return '<button class="fb-act" onclick="showEndPhaseModal()">Beenden</button>';
+        case 'unclear':return '<button class="fb-act" onclick="requeueFood(\''+f.id+'\')">Nochmal</button>';
+        case 'safe':case 'trigger':return '';
+        case 'recovery':return '';
+        default:return '';
+    }
+}
+function startPhaseFor(foodId){
+    const food=D.foods.find(f=>f.id===foodId);if(!food)return;
+    if(D.currentPhase&&D.currentPhase.name!=='Recovery'){
+        if(!confirm('Aktuelle Phase beenden und '+food.name+' starten?'))return;
+    }
+    showStartPhaseModal(food);
+}
+function showStartPhaseModal(food){
+    document.getElementById('modalContent').innerHTML='<div class="modal-title">🔬 Phase starten: '+food.icon+' '+food.name+'</div><div class="modal-sub">Konfiguriere die Reintroduktions-Phase.</div>'+
+        '<div class="modal-row"><label>Dauer</label><select class="inp inp-sm" id="phaseDur"><option value="4">4 Wochen</option><option value="6" selected>6 Wochen</option><option value="8">8 Wochen</option><option value="10">10 Wochen</option><option value="12">12 Wochen</option></select></div>'+
+        '<div class="modal-row"><label>Ziel</label><select class="inp inp-sm" id="phaseGoal"><option value="3">3x pro Woche</option><option value="4" selected>4x pro Woche</option><option value="5">5x pro Woche</option><option value="7">Täglich</option></select></div>'+
+        '<div class="modal-row"><label>Notiz</label><input class="inp inp-sm" id="phaseNote" placeholder="z.B. Starte mit gebackenem Ei"></div>'+
+        '<div class="modal-btns mt12"><button class="btn btn-p" onclick="confirmStartPhase(\''+food.id+'\')">Phase starten</button><button class="btn btn-g" onclick="closeModal()">Abbrechen</button></div>';
+    document.getElementById('modalBg').classList.add('vis');
+}
+function confirmStartPhase(foodId){
+    const food=D.foods.find(f=>f.id===foodId);
+    const dur=parseInt(document.getElementById('phaseDur').value);
+    const goal=parseInt(document.getElementById('phaseGoal').value);
+    const note=document.getElementById('phaseNote').value;
+
+    // End current phase if exists
+    if(D.currentPhase&&D.currentPhase.name!=='Recovery'){
+        const old=D.foods.find(f=>D.currentPhase.name.includes(f.name));
+        if(old)old.status='queue';
+    }
+
+    D.currentPhase={name:food.name+'-Reintroduktion',foodId:food.id,startDate:new Date().toISOString().split('T')[0],durationWeeks:dur,goalPerWeek:goal,note:note};
+    food.status='active';
+    // Move previous active back
+    D.foods.filter(f=>f.status==='active'&&f.id!==foodId).forEach(f=>{f.status='queue';});
+    save();closeModal();updateAll();renderBank();
+    showToast('🔬 '+food.name+'-Phase gestartet');
+}
+function skipFood(id){
+    const food=D.foods.find(f=>f.id===id);if(!food)return;
+    const reason=prompt('Grund fürs Überspringen (optional):','');
+    food.status='skipped';food.skipReason=reason||'';
+    save();renderBank();
+}
+function unskipFood(id){const food=D.foods.find(f=>f.id===id);if(food){food.status='queue';save();renderBank();}}
+function requeueFood(id){const food=D.foods.find(f=>f.id===id);if(food){food.status='queue';save();renderBank();}}
+
+function showEndPhaseModal(){
+    document.getElementById('modalContent').innerHTML='<div class="modal-title">🏁 Phase abschließen</div><div class="modal-sub">Wie bewertest du '+(D.currentPhase?D.currentPhase.name:'diese Phase')+'?</div>'+
+        '<div class="modal-btns"><button class="btn" style="background:var(--greenA);color:var(--green);border:1.5px solid var(--green)" onclick="endPhaseAs(\'safe\')">✅ Safe – kein Trigger</button>'+
+        '<button class="btn" style="background:var(--redA);color:var(--red);border:1.5px solid var(--red)" onclick="endPhaseAs(\'trigger\')">❌ Trigger</button>'+
+        '<button class="btn" style="background:var(--orangeA);color:var(--orange);border:1.5px solid var(--orange)" onclick="endPhaseAs(\'unclear\')">❓ Unklar – später nochmal</button>'+
+        '<button class="btn btn-g" onclick="closeModal()">Abbrechen</button></div>';
+    document.getElementById('modalBg').classList.add('vis');
+}
+function endPhaseAs(result){
+    if(!D.currentPhase)return;
+    const ended={...D.currentPhase,endDate:new Date().toISOString().split('T')[0],result:result,avgScore:calcPhaseAvg(D.currentPhase.name)};
+    D.phases.push(ended);
+    const food=D.foods.find(f=>f.id===D.currentPhase.foodId||(D.currentPhase.name&&D.currentPhase.name.includes(f.name)));
+    if(food)food.status=result;
+    if(result==='trigger'){
+        D.currentPhase={name:'Recovery',startDate:new Date().toISOString().split('T')[0],durationWeeks:4,recoveryFrom:ended.name};
+    }else{
+        D.currentPhase=null;
+    }
+    save();closeModal();dismissAlert();updateAll();renderBank();
+    showToast(result==='safe'?'✅ Als safe markiert':result==='trigger'?'❌ Als Trigger markiert':'❓ Als unklar markiert');
+}
+function calcPhaseAvg(name){
+    const days=D.days.filter(x=>x.phase===name&&x.score!==undefined);
+    return days.length?(days.reduce((a,b)=>a+b.score,0)/days.length).toFixed(1):0;
+}
+
+function showAddFoodModal(){
+    document.getElementById('modalContent').innerHTML='<div class="modal-title">+ Lebensmittel hinzufügen</div><div class="modal-sub">Eigenes Lebensmittel zur Food Bank hinzufügen.</div>'+
+        '<div class="modal-row"><label>Name</label><input class="inp inp-sm" id="newFoodName" placeholder="z.B. Sesam"></div>'+
+        '<div class="modal-row"><label>Icon</label><input class="inp inp-sm" id="newFoodIcon" placeholder="🌱" style="width:60px"></div>'+
+        '<div class="modal-btns mt12"><button class="btn btn-p" onclick="addCustomFood()">Hinzufügen</button><button class="btn btn-g" onclick="closeModal()">Abbrechen</button></div>';
+    document.getElementById('modalBg').classList.add('vis');
+}
+function addCustomFood(){
+    const name=document.getElementById('newFoodName').value.trim();
+    const icon=document.getElementById('newFoodIcon').value.trim()||'🔹';
+    if(!name){showToast('Name eingeben');return;}
+    D.foods.push({id:'custom_'+Date.now(),name:name,icon:icon,status:'queue'});
+    save();closeModal();renderBank();showToast('✅ '+name+' hinzugefügt');
+}
+
+// ============ JOURNEY ============
+function renderJourney(){
+    renderJourneyPhase();
+    renderTimeline();
+    renderCompliance();
+    renderTrendChart();
+}
+function renderJourneyPhase(){
+    const c=document.getElementById('journeyPhaseInfo');
+    if(!D.currentPhase){c.innerHTML='<div style="font-size:12px;color:var(--text3)">Keine Phase aktiv. Starte eine in der Food Bank.</div>';return;}
+    const days=daysSince(D.currentPhase.startDate);
+    const total=D.currentPhase.durationWeeks*7;
+    const pct=Math.min(100,Math.round(days/total*100));
+    const avg=calcPhaseAvg(D.currentPhase.name);
+    c.innerHTML='<div style="font-size:14px;font-weight:700;margin-bottom:4px">'+D.currentPhase.name+'</div>'+
+        '<div style="font-size:11px;color:var(--text2)">Tag '+days+' von '+total+' · Woche '+Math.ceil(days/7)+' von '+D.currentPhase.durationWeeks+'</div>'+
+        '<div style="height:4px;background:var(--border);border-radius:2px;margin-top:8px;overflow:hidden"><div style="height:100%;background:var(--green);width:'+pct+'%;border-radius:2px"></div></div>'+
+        '<div class="stats mt10"><div class="stat"><div class="stat-v">'+days+'</div><div class="stat-l">Tage</div></div><div class="stat"><div class="stat-v">'+avg+'</div><div class="stat-l">⌀ Score</div></div><div class="stat"><div class="stat-v">'+getBaselineAvg().toFixed(1)+'</div><div class="stat-l">Baseline</div></div></div>'+
+        (D.currentPhase.note?'<div style="font-size:10px;color:var(--text3);margin-top:8px;font-style:italic">📝 '+escHtml(D.currentPhase.note)+'</div>':'');
+}
+function renderTimeline(){
+    const c=document.getElementById('timelineBox');
+    let items=[];
+    // Past phases
+    D.phases.forEach(p=>{
+        const color=p.result==='safe'?'green':p.result==='trigger'?'red':'orange';
+        const icon=p.result==='safe'?'✅':p.result==='trigger'?'❌':'❓';
+        items.push({date:p.startDate,title:icon+' '+p.name,sub:new Date(p.startDate).toLocaleDateString('de-DE')+' – '+new Date(p.endDate).toLocaleDateString('de-DE')+' · ⌀ '+(p.avgScore||'–'),color:color,score:p.avgScore});
+    });
+    // Current
+    if(D.currentPhase){
+        const isRecovery=D.currentPhase.name==='Recovery';
+        items.push({date:D.currentPhase.startDate,title:(isRecovery?'🔄 ':'🔬 ')+D.currentPhase.name,sub:'Seit '+new Date(D.currentPhase.startDate).toLocaleDateString('de-DE')+' · Laufend',color:isRecovery?'purple':'blue',score:null,active:true});
+    }
+    items.sort((a,b)=>a.date.localeCompare(b.date));
+    if(!items.length){c.innerHTML='<div style="font-size:11px;color:var(--text3)">Noch keine Phasen abgeschlossen.</div>';return;}
+    c.innerHTML=items.map(it=>{
+        const scoreHtml=it.score?'<span class="tl-score '+(parseFloat(it.score)<=2?'good':parseFloat(it.score)<=4?'mid':'bad')+'">⌀ '+it.score+'</span>':'';
+        return '<div class="tl-item"><div class="tl-dot '+it.color+(it.active?' pulse':'')+'"></div><div class="tl-title">'+it.title+'</div><div class="tl-sub">'+it.sub+'</div>'+scoreHtml+'</div>';
+    }).join('');
+}
+function renderCompliance(){
+    const c=document.getElementById('compDots');
+    const hint=document.getElementById('compHint');
+    if(!D.currentPhase){c.innerHTML='';hint.textContent='';return;}
+    const now=new Date();
+    const dow=(now.getDay()+6)%7;
+    const mon=new Date(now);mon.setDate(now.getDate()-dow);
+    let count=0;
+    let html='';
+    for(let i=0;i<7;i++){
+        const d=new Date(mon);d.setDate(mon.getDate()+i);
+        const ds=d.toISOString().split('T')[0];
+        const entry=D.days.find(x=>x.date===ds);
+        const hasTest=entry&&entry.meals&&Object.values(entry.meals).some(m=>m.isTest);
+        const isToday=ds===now.toISOString().split('T')[0];
+        const isFuture=d>now;
+        if(hasTest)count++;
+        html+='<div style="flex:1;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;border:1px solid '+(isToday?'var(--green)':'var(--border)')+';'+(hasTest?'background:var(--greenA);color:var(--green)':'background:var(--bg2);color:var(--text3)')+(isFuture?';opacity:.3':'')+'">'+
+            (hasTest?'✓':WEEKDAYS[i])+'</div>';
+    }
+    c.innerHTML=html;
+    const goal=D.currentPhase.goalPerWeek||4;
+    if(count>=goal)hint.textContent='👍 Ziel erreicht! ('+count+'/'+goal+')';
+    else hint.textContent='⚡ Noch '+(goal-count)+'x Test-Food nötig diese Woche ('+count+'/'+goal+')';
+}
+function renderTrendChart(){
+    const c=document.getElementById('trendChart');c.innerHTML='';
+    const baseline=getBaselineAvg();
+    // Show last 14 days
+    const now=new Date();
+    for(let i=13;i>=0;i--){
+        const d=new Date(now);d.setDate(now.getDate()-i);
+        const ds=d.toISOString().split('T')[0];
+        const entry=D.days.find(x=>x.date===ds);
+        const bar=document.createElement('div');bar.className='trend-bar';
+        if(entry&&entry.score!==undefined){
+            const h=Math.max(4,entry.score*5);
+            bar.style.height=h+'px';
+            bar.className='trend-bar '+(entry.score<=baseline+0.5?'g':entry.score<=baseline+2?'o':'r');
+            bar.title=ds+': '+entry.score;
+        }else{
+            bar.style.height='2px';bar.style.opacity='.2';bar.className='trend-bar g';
+        }
+        c.appendChild(bar);
+    }
+}
+
+// ============ MORE ============
+function renderMore(){
+    document.getElementById('statsGrid').innerHTML='<div class="stat"><div class="stat-v">'+D.days.length+'</div><div class="stat-l">Tage</div></div><div class="stat"><div class="stat-v">'+D.phases.length+'</div><div class="stat-l">Phasen</div></div><div class="stat"><div class="stat-v">'+D.foods.filter(f=>f.status==='safe'||f.status==='trigger').length+'/'+D.foods.length+'</div><div class="stat-l">Getestet</div></div>';
+    renderTriggerProfile();
+    updateBackupInfo();
+}
+function renderTriggerProfile(){
+    const c=document.getElementById('triggerProfile');
+    const tested=D.foods.filter(f=>f.status==='safe'||f.status==='trigger');
+    if(!tested.length){c.innerHTML='<div style="font-size:11px;color:var(--text3)">Noch keine Ergebnisse.</div>';return;}
+    c.innerHTML=tested.map(f=>'<div class="fb-item '+(f.status==='safe'?'fb-safe':'fb-trigger')+'"><span class="fb-ico">'+f.icon+'</span><div class="fb-info"><div class="fb-name">'+f.name+'</div><div class="fb-detail">'+(f.status==='safe'?'✅ Safe':'❌ Trigger')+'</div></div></div>').join('');
+}
+
+// ============ BACKUP ============
+function updateBackupStatus(){
+    const pill=document.getElementById('backupPill');
+    const n=D.meta.sinceBackup;
+    if(n<3){pill.className='backup-pill bp-ok';pill.textContent='● OK';}
+    else{pill.className='backup-pill bp-warn';pill.textContent='● '+n+' neu';}
+}
+function updateBackupInfo(){
+    const el=document.getElementById('backupInfo');
+    if(D.meta.lastBackup){el.textContent='Letztes Backup: '+new Date(D.meta.lastBackup).toLocaleDateString('de-DE')+' · '+D.meta.sinceBackup+' neu';}
+    else{el.textContent='Noch kein Backup erstellt · '+D.days.length+' Einträge';}
+}
+function showBackupReminder(){
+    document.getElementById('modalContent').innerHTML='<div class="modal-title">💾 Backup-Erinnerung</div><div class="modal-sub">Du hast '+D.meta.sinceBackup+' neue Einträge. Sichere deine Daten.</div><div class="modal-btns"><button class="btn btn-p" onclick="doBackup();closeModal()">Jetzt sichern</button><button class="btn btn-g" onclick="closeModal()">Später</button></div>';
+    document.getElementById('modalBg').classList.add('vis');
+}
+function doBackup(){
+    if(!D.days.length&&!D.phases.length){showToast('Keine Daten');return;}
+    dl(new Blob([JSON.stringify(D,null,2)],{type:'application/json'}),'eoe-backup-'+new Date().toISOString().split('T')[0]+'.json');
+    D.meta.lastBackup=new Date().toISOString();D.meta.sinceBackup=0;save();updateBackupStatus();updateBackupInfo();
+    showToast('💾 Backup gespeichert');
+}
+function exportCSV(){
+    if(!D.days.length){showToast('Keine Daten');return;}
+    const h=['Datum','Phase','Score','Schlucken','Bolus','Schmerz','Texturen','Frühstück','FR_Test','Mittagessen','MI_Test','Abendessen','AB_Test','Snack','SN_Test','OCR_Produkte','Vermieden','Medikamente','Notizen'];
+    const rows=D.days.map(d=>{
+        const m=d.meals||{};
+        const ocrAll=MEALS.map(ml=>(m[ml.k]&&m[ml.k].ocrItems||[]).map(o=>o.name+': '+o.text).join(' | ')).filter(x=>x).join(' || ');
+        return[d.date,d.phase||'',d.score||0,d.swallowing||0,d.bolus||0,d.pain||0,(d.textures||[]).join('; '),
+            (m.breakfast||{}).foods||'',(m.breakfast||{}).isTest?'Ja':'',
+            (m.lunch||{}).foods||'',(m.lunch||{}).isTest?'Ja':'',
+            (m.dinner||{}).foods||'',(m.dinner||{}).isTest?'Ja':'',
+            (m.snack||{}).foods||'',(m.snack||{}).isTest?'Ja':'',
+            ocrAll,d.avoided||'',d.meds||'',d.notes||''];
+    });
+    const csv=[h,...rows].map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+    dl(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}),'eoe-export-'+new Date().toISOString().split('T')[0]+'.csv');
+    showToast('CSV exportiert ✓');
+}
+function handleImport(e){
+    const file=e.target.files[0];if(!file)return;
+    const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(d.days){D=d;save();init();showToast('✅ Import OK');}else showToast('❌ Ungültig');}catch(err){showToast('❌ Fehler');}};
+    r.readAsText(file);e.target.value='';
+}
+function clearAll(){if(!confirm('ALLE Daten löschen?'))return;D={days:[],foods:DEFAULT_FOODS.map(f=>({...f,status:'queue'})),phases:[],currentPhase:null,meta:{lastBackup:null,sinceBackup:0}};save();init();showToast('Gelöscht');}
+
+// ============ HEADER UPDATE ============
+function updateAll(){
+    updateHeader();checkAlert();
+}
+function updateHeader(){
+    const cp=D.currentPhase;
+    const strip=document.getElementById('phaseStripText');
+    const pct=document.getElementById('phaseStripPct');
+    if(!cp){strip.innerHTML='<strong>Keine Phase aktiv</strong> · Starte in Food Bank';pct.textContent='';return;}
+    const days=daysSince(cp.startDate);
+    const total=cp.durationWeeks*7;
+    const p=Math.min(100,Math.round(days/total*100));
+    strip.innerHTML='<strong>'+cp.name+'</strong> · Tag '+days+'/'+total;
+    pct.textContent=p+'%';
+    document.getElementById('phaseStripPct').style.color=p>=100?'var(--orange)':'var(--green)';
+}
+
+// ============ MODALS ============
+function showModal(type){
+    let html='';
+    if(type==='ocrProgress'){
+        html='<div class="modal-title">📷 Texterkennung</div><div class="ocr-modal-content"><div class="ocr-prog"><div class="ocr-spinner"></div><span id="ocrModalStatus">Lade...</span></div><div class="ocr-bar mt6"><div class="ocr-bar-fill" id="ocrModalBar"></div></div></div>';
+    }
+    document.getElementById('modalContent').innerHTML=html;
+    document.getElementById('modalBg').classList.add('vis');
+}
+function closeModal(){document.getElementById('modalBg').classList.remove('vis');}
+
+// ============ HELPERS ============
+function daysSince(dateStr){return Math.max(1,Math.floor((new Date()-new Date(dateStr))/86400000)+1);}
+function dl(blob,name){const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(u);}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+function escHtml(s){const d=document.createElement('div');d.appendChild(document.createTextNode(s||''));return d.innerHTML;}
+
+// Click outside modal to close
+document.getElementById('modalBg').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+init();
+</script>
+</body>
+</html>
