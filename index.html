@@ -10,8 +10,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}:root{--bg:#09090b;--bg2:#111114;--card:#131316;--card2:#1c1c21;--border:#27272a;--border2:#3f3f46;--text:#fafafa;--text2:#a1a1aa;--text3:#52525b;--green:#22c55e;--greenA:rgba(34,197,94,.1);--red:#ef4444;--redA:rgba(239,68,68,.08);--orange:#f59e0b;--orangeA:rgba(245,158,11,.08);--blue:#3b82f6;--blueA:rgba(59,130,246,.08);--purple:#a855f7;--purpleA:rgba(168,85,247,.1);--r:14px;--rs:10px;--rr:8px}body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;font-size:14px}.app{max-width:960px;margin:0 auto;padding:0 16px 110px}@media(min-width:768px){.app{padding:0 24px 110px}}
-.hdr{position:sticky;top:0;z-index:100;background:rgba(9,9,11,.88);backdrop-filter:blur(20px);padding:14px 0 10px}.hdr-row{display:flex;justify-content:space-between;align-items:center}.hdr h1{font-size:20px;font-weight:700}.hdr-actions{display:flex;gap:6px;align-items:center}.pill{font-size:10px;padding:5px 10px;border-radius:12px;font-weight:600;cursor:pointer;border:none;font-family:inherit}.pill-green{background:var(--greenA);color:var(--green)}.pill-orange{background:var(--orangeA);color:var(--orange)}.pill-blue{background:var(--blueA);color:var(--blue)}
+*{margin:0;padding:0;box-sizing:border-box}:root{--bg:#09090b;--bg2:#111114;--card:#131316;--card2:#1c1c21;--border:#27272a;--border2:#3f3f46;--text:#fafafa;--text2:#a1a1aa;--text3:#52525b;--green:#22c55e;--greenA:rgba(34,197,94,.1);--red:#ef4444;--redA:rgba(239,68,68,.08);--orange:#f59e0b;--orangeA:rgba(245,158,11,.08);--blue:#3b82f6;--blueA:rgba(59,130,246,.08);--purple:#a855f7;--purpleA:rgba(168,85,247,.1);--r:14px;--rs:10px;--rr:8px}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;font-size:14px}
+.app{max-width:960px;margin:0 auto;padding:0 16px 110px}@media(min-width:768px){.app{padding:0 24px 110px}}
+.hdr{position:sticky;top:0;z-index:100;background:rgba(9,9,11,.88);backdrop-filter:blur(20px);padding:14px 0 10px}.hdr-row{display:flex;justify-content:space-between;align-items:center}.hdr h1{font-size:20px;font-weight:700}.hdr-actions{display:flex;gap:6px}
+.pill{font-size:10px;padding:5px 10px;border-radius:12px;font-weight:600;cursor:pointer;border:none;font-family:inherit}.pill-green{background:var(--greenA);color:var(--green)}.pill-orange{background:var(--orangeA);color:var(--orange)}.pill-blue{background:var(--blueA);color:var(--blue)}
 .phase-strip{margin-top:8px;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);display:flex;align-items:center;gap:8px}.phase-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}.phase-strip-text{font-size:12px;color:var(--text2);flex:1}.phase-strip-text strong{color:var(--text)}.phase-strip-pct{font-size:12px;font-weight:700;color:var(--green)}
 .draft-bar{margin-top:6px;padding:6px 12px;border-radius:var(--rr);font-size:11px;font-weight:600;display:none}.draft-bar.vis{display:flex}.draft-bar.draft{background:var(--orangeA);color:var(--orange)}.draft-bar.saved{background:var(--greenA);color:var(--green)}
 .date-nav{display:flex;align-items:center;gap:6px;margin-bottom:10px}.date-nav-btn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg2);color:var(--text);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit}.date-inp-wrap{flex:1}.date-today-btn{padding:6px 10px;border-radius:var(--rr);border:1.5px solid var(--border);background:var(--bg2);color:var(--text3);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit}.date-today-btn.is-today{border-color:var(--green);color:var(--green);background:var(--greenA)}.date-label{font-size:12px;color:var(--text3)}
@@ -22,27 +25,32 @@
 .inp{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--rr);font-size:14px;font-family:inherit;color:var(--text);background:var(--bg2);outline:none}.inp:focus{border-color:var(--green);box-shadow:0 0 0 3px var(--greenA)}.inp-sm{font-size:13px;padding:10px 12px}textarea.inp{resize:vertical;min-height:48px}
 .btn{padding:14px 16px;border:none;border-radius:var(--rs);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;width:100%;text-align:center}.btn:active{transform:scale(.98)}.btn-p{background:var(--green);color:#000}.btn-s{background:transparent;color:var(--green);border:1.5px solid var(--green)}.btn-g{background:transparent;color:var(--text3);border:1.5px solid var(--border)}.btn-d{background:transparent;color:var(--red);border:1.5px solid rgba(239,68,68,.3)}.btn-sm{padding:10px 14px;font-size:12px;width:auto}
 .meal{padding:14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:8px}.meal.has-data{border-color:var(--border2)}.meal-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.meal-label{font-size:13px;font-weight:600;color:var(--text2)}.meal-badge{font-size:11px;padding:6px 10px;border-radius:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);color:var(--text3);background:var(--bg2)}.meal-badge.active-test{background:var(--greenA);color:var(--green);border-color:var(--green)}.meal-inp{width:100%;padding:10px 0;border:none;background:none;font-size:14px;font-family:inherit;color:var(--text);outline:none;border-bottom:1px solid var(--border)}.meal-inp:focus{border-bottom-color:var(--green)}.meal-inp::placeholder{color:var(--text3)}
-.ingr-list{margin-top:8px}.ingr-item{padding:8px 10px;background:var(--card);border:1px solid var(--border);border-radius:var(--rr);margin-bottom:4px}.ingr-item-top{display:flex;justify-content:space-between;align-items:center}.ingr-item-name{font-size:12px;font-weight:600;color:var(--orange)}.ingr-item-del{background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;padding:2px 6px;min-width:28px;min-height:28px}.ingr-item-text{font-size:10px;color:var(--text2);line-height:1.4;margin-top:3px;max-height:40px;overflow:hidden}.ingr-item-notext{font-size:10px;color:var(--text3);font-style:italic}
+.ingr-list{margin-top:8px}.ingr-item{padding:8px 10px;background:var(--card);border:1px solid var(--border);border-radius:var(--rr);margin-bottom:4px}.ingr-item-top{display:flex;justify-content:space-between;align-items:center}.ingr-item-name{font-size:12px;font-weight:600;color:var(--orange)}.ingr-item-del{background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;padding:2px 6px}.ingr-item-text{font-size:10px;color:var(--text2);line-height:1.4;margin-top:3px;max-height:40px;overflow:hidden}.ingr-item-notext{font-size:10px;color:var(--text3);font-style:italic}
 .add-prod-btn{display:inline-flex;gap:4px;padding:6px 12px;border:1.5px dashed var(--border);border-radius:var(--rr);background:none;color:var(--text3);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px}.add-prod-btn:active{border-color:var(--green);color:var(--green);background:var(--greenA)}
 .prod-picker{display:none;margin-top:10px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:var(--rs)}.prod-picker.vis{display:block}.prod-picker-h{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
-.quick-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}.quick-chip{padding:6px 10px;border:1.5px solid var(--border);border-radius:14px;font-size:11px;color:var(--text2);cursor:pointer;background:var(--bg2);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.quick-chip:active{border-color:var(--green);background:var(--greenA);color:var(--green)}
-.prod-search{position:relative;margin-bottom:8px}.prod-search-results{position:absolute;top:100%;left:0;right:0;background:var(--card);border:1px solid var(--border);border-radius:var(--rr);max-height:180px;overflow-y:auto;z-index:50;display:none;margin-top:4px}.prod-search-results.vis{display:block}.psr-item{padding:10px 12px;cursor:pointer;border-bottom:1px solid var(--border)}.psr-item:last-child{border-bottom:none}.psr-item-name{font-size:12px;font-weight:600}.psr-item-text{font-size:10px;color:var(--text3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.quick-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}.quick-chip{padding:6px 10px;border:1.5px solid var(--border);border-radius:14px;font-size:11px;color:var(--text2);cursor:pointer;background:var(--bg2);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prod-search{position:relative;margin-bottom:8px}.prod-search-results{position:absolute;top:100%;left:0;right:0;background:var(--card);border:1px solid var(--border);border-radius:var(--rr);max-height:180px;overflow-y:auto;z-index:50;display:none;margin-top:4px}.prod-search-results.vis{display:block}.psr-item{padding:10px 12px;cursor:pointer;border-bottom:1px solid var(--border)}.psr-item-name{font-size:12px;font-weight:600}.psr-item-text{font-size:10px;color:var(--text3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .prod-new-btns{display:flex;gap:6px}.prod-new-btn{flex:1;padding:10px;border:1.5px solid var(--border);border-radius:var(--rr);background:var(--bg2);text-align:center;cursor:pointer;font-family:inherit}.prod-new-ico{font-size:18px;margin-bottom:2px}.prod-new-txt{font-size:9px;color:var(--text3)}
 .prod-new-panel{display:none;margin-top:8px;padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rr)}.prod-new-panel.vis{display:block}
 .bc-row{display:flex;gap:6px}.bc-row .inp{flex:1}.bc-result{margin-top:8px;padding:10px;background:var(--bg2);border-radius:var(--rr);display:none}.bc-result.vis{display:block}.bc-result.found{border:1px solid var(--green)}.bc-result.partial{border:1px solid var(--orange)}.bc-result.notfound{border:1px solid var(--border)}
 .bc-spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .6s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
-.scanner-overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:600;display:none;flex-direction:column;align-items:center;justify-content:center}.scanner-overlay.vis{display:flex}.scanner-header{position:absolute;top:0;left:0;right:0;padding:16px;display:flex;justify-content:space-between;align-items:center}.scanner-title{font-size:14px;font-weight:600;color:#fff}.scanner-close{background:rgba(255,255,255,.15);border:none;color:#fff;font-size:20px;width:40px;height:40px;border-radius:50%;cursor:pointer}.scanner-box{width:100%;max-width:400px;aspect-ratio:4/3;border-radius:12px;overflow:hidden}.scanner-hint{margin-top:16px;font-size:12px;color:var(--text3)}#scannerVideo{width:100%}
+.scanner-overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:600;display:none;flex-direction:column;align-items:center;justify-content:center}.scanner-overlay.vis{display:flex}.scanner-header{position:absolute;top:0;left:0;right:0;padding:16px;display:flex;justify-content:space-between;align-items:center}.scanner-title{font-size:14px;font-weight:600;color:#fff}.scanner-close{background:rgba(255,255,255,.15);border:none;color:#fff;font-size:20px;width:40px;height:40px;border-radius:50%;cursor:pointer}.scanner-box{width:100%;max-width:400px;aspect-ratio:4/3;border-radius:12px;overflow:hidden}#scannerVideo{width:100%}
 .ci-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);gap:12px}.ci-row:last-child{border-bottom:none}.ci-label{font-size:13px;color:var(--text2);flex:1}
 .emoji-row{display:flex;gap:6px}.emo-btn{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg2);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}.emo-btn.active{border-color:var(--green);background:var(--greenA)}
 .counter{display:flex;align-items:center;gap:10px}.c-btn{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg2);color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit}.c-val{font-size:18px;font-weight:700;min-width:24px;text-align:center}
 .tex-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.tex-chip{padding:8px 14px;border:1.5px solid var(--border);border-radius:20px;font-size:12px;color:var(--text3);cursor:pointer;background:var(--bg2)}.tex-chip.active{background:var(--greenA);color:var(--green);border-color:var(--green)}.tex-custom-input{margin-top:8px;display:none}.tex-custom-input.vis{display:block}
 .bolus-event{padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:8px}.bolus-event-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.bolus-event-num{font-size:12px;font-weight:700;color:var(--text2)}.bolus-severity{display:flex;gap:4px;margin-bottom:8px}.sev-btn{flex:1;padding:8px 4px;border:1.5px solid var(--border);border-radius:var(--rr);text-align:center;cursor:pointer;font-size:11px;font-weight:600;color:var(--text3);background:var(--bg2)}.sev-btn.s1.active{background:var(--greenA);color:var(--green);border-color:var(--green)}.sev-btn.s2.active{background:var(--orangeA);color:var(--orange);border-color:var(--orange)}.sev-btn.s3.active{background:var(--redA);color:var(--red);border-color:var(--red)}.bolus-detail{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}.bolus-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}.bolus-chip{padding:5px 10px;border:1px solid var(--border);border-radius:14px;font-size:10px;color:var(--text3);cursor:pointer;background:var(--bg2)}.bolus-chip.active{background:var(--greenA);color:var(--green);border-color:var(--green)}.bolus-add-btn{width:100%;padding:10px;border:1.5px dashed var(--border);background:none;border-radius:var(--rs);color:var(--text3);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit}
 .med-item{padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:8px;display:flex;align-items:center;gap:12px}.med-info{flex:1}.med-name{font-size:13px;font-weight:600}.med-dose{font-size:10px;color:var(--text3);margin-top:1px}
-/* FOOD BANK */
 .fb-section{margin-bottom:16px}.fb-section-h{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--text3);margin-bottom:8px}.fb-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:6px;cursor:pointer}.fb-ico{font-size:22px;flex-shrink:0}.fb-info{flex:1;min-width:0}.fb-name{font-size:14px;font-weight:600}.fb-meta{font-size:10px;color:var(--text3);margin-top:2px}.fb-actions{display:flex;gap:4px}.fb-act{padding:7px 10px;border-radius:6px;font-size:11px;font-weight:600;border:1px solid var(--border);background:var(--bg2);color:var(--text3);cursor:pointer;font-family:inherit}.fb-active .fb-name{color:var(--green)}.fb-safe .fb-name{color:var(--green)}.fb-trigger .fb-name{color:var(--red)}.fb-inconclusive .fb-name{color:var(--purple)}
-/* Test History in modal */
-.test-hist{margin:12px 0;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);max-height:300px;overflow-y:auto}.th-item{padding:10px;background:var(--card);border:1px solid var(--border);border-radius:var(--rr);margin-bottom:6px}.th-item:last-child{margin-bottom:0}.th-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}.th-result{font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px}.th-result.safe{background:var(--greenA);color:var(--green)}.th-result.trigger{background:var(--redA);color:var(--red)}.th-result.inconclusive{background:var(--purpleA);color:var(--purple)}.th-dates{font-size:10px;color:var(--text3)}.th-stats{font-size:10px;color:var(--text2);margin-top:4px}.th-note{font-size:11px;color:var(--text2);margin-top:6px;padding:6px 8px;background:var(--bg);border-radius:4px;font-style:italic}
+.test-hist{margin:12px 0;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);max-height:300px;overflow-y:auto}.th-item{padding:10px;background:var(--card);border:1px solid var(--border);border-radius:var(--rr);margin-bottom:6px}.th-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}.th-result{font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px}.th-result.safe{background:var(--greenA);color:var(--green)}.th-result.trigger{background:var(--redA);color:var(--red)}.th-result.inconclusive{background:var(--purpleA);color:var(--purple)}.th-dates{font-size:10px;color:var(--text3)}.th-stats{font-size:10px;color:var(--text2);margin-top:4px}.th-note{font-size:11px;color:var(--text2);margin-top:6px;padding:6px 8px;background:var(--bg);border-radius:4px;font-style:italic}
 .status-opt{display:flex;align-items:flex-start;gap:10px;padding:12px;background:var(--bg2);border:2px solid var(--border);border-radius:var(--rs);margin-bottom:8px;cursor:pointer}.status-opt.selected{border-color:var(--green);background:var(--greenA)}.status-opt-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center}.status-opt.selected .status-opt-radio{border-color:var(--green)}.status-opt.selected .status-opt-radio::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--green)}.status-opt-text{flex:1}.status-opt-title{font-size:13px;font-weight:600;margin-bottom:2px}.status-opt-desc{font-size:11px;color:var(--text3);line-height:1.4}
+/* Readiness Card */
+.readiness-card{padding:16px;border-radius:var(--r);margin-bottom:12px;border:2px solid}.rc-red{background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.3)}.rc-yellow{background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.3)}.rc-green{background:rgba(34,197,94,.06);border-color:rgba(34,197,94,.4)}
+.rc-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}.rc-icon{font-size:24px}.rc-title{font-size:14px;font-weight:700}.rc-red .rc-title{color:var(--red)}.rc-yellow .rc-title{color:var(--orange)}.rc-green .rc-title{color:var(--green)}
+.rc-subtitle{font-size:11px;color:var(--text3);margin-top:2px}
+.rc-criteria{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}.rc-crit{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:var(--bg2);border-radius:var(--rr);font-size:12px}.rc-crit-ico{font-size:14px;flex-shrink:0}.rc-crit-text{flex:1;color:var(--text2)}.rc-crit-text strong{color:var(--text)}.rc-crit-progress{font-size:10px;color:var(--text3);margin-top:2px}
+.rc-summary{padding:10px;background:var(--bg2);border-radius:var(--rr);font-size:12px;color:var(--text2)}.rc-summary strong{color:var(--text)}
+.rc-actions{display:flex;flex-direction:column;gap:6px;margin-top:10px}
 .timeline{position:relative;padding-left:22px;margin-top:12px}.timeline::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:2px;background:var(--border)}.tl-item{position:relative;padding-bottom:18px}.tl-item:last-child{padding-bottom:0}.tl-dot{position:absolute;left:-19px;top:2px;width:12px;height:12px;border-radius:50%;border:2px solid var(--border);background:var(--bg2)}.tl-dot.green{background:var(--green);border-color:var(--green)}.tl-dot.red{background:var(--red);border-color:var(--red)}.tl-dot.purple{background:var(--purple);border-color:var(--purple)}.tl-dot.blue{background:var(--blue);border-color:var(--blue)}.tl-dot.pulse{animation:pulse 2s infinite}.tl-title{font-size:13px;font-weight:600}.tl-sub{font-size:11px;color:var(--text3);margin-top:2px}
 .trend-mini{display:flex;align-items:flex-end;gap:2px;height:60px;margin-top:10px}.trend-bar{flex:1;border-radius:2px 2px 0 0;min-height:2px}.trend-bar.g{background:var(--green)}.trend-bar.o{background:var(--orange)}.trend-bar.r{background:var(--red)}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.stat{text-align:center;padding:12px 8px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rr)}.stat-v{font-size:20px;font-weight:700;color:var(--green)}.stat-l{font-size:10px;color:var(--text3);text-transform:uppercase}
@@ -56,17 +64,18 @@
 <div class="app">
 <div class="toast" id="toast"></div>
 <div class="modal-bg" id="modalBg"><div class="modal" id="modalContent"></div></div>
-<div class="scanner-overlay" id="scannerOverlay"><div class="scanner-header"><span class="scanner-title">📷 Barcode</span><button class="scanner-close" onclick="stopScanner()">✕</button></div><div class="scanner-box"><div id="scannerVideo"></div></div><div class="scanner-hint">Halte den Barcode in den Rahmen</div></div>
+<div class="scanner-overlay" id="scannerOverlay"><div class="scanner-header"><span class="scanner-title">📷 Barcode</span><button class="scanner-close" onclick="stopScanner()">✕</button></div><div class="scanner-box"><div id="scannerVideo"></div></div></div>
 <div class="hdr"><div class="hdr-row"><h1>EOE Tracker</h1><div class="hdr-actions"><button class="pill pill-blue" onclick="showSyncModal()">☁️ Sync</button><span class="pill pill-green" id="backupPill" onclick="switchView('more')">● OK</span></div></div><div class="phase-strip"><div class="phase-dot"></div><div class="phase-strip-text" id="phaseStripText"><strong>Keine Phase</strong></div><div class="phase-strip-pct" id="phaseStripPct"></div></div><div class="draft-bar" id="draftBar"><span id="draftBarText"></span></div></div>
 <div class="view active" id="view-today">
 <div class="date-nav"><button class="date-nav-btn" onclick="navDay(-1)">◀</button><div class="date-inp-wrap"><input type="date" class="inp inp-sm" id="todayDate" style="width:100%"></div><span class="date-label" id="todayLabel"></span><button class="date-today-btn" id="todayBtn" onclick="goToday()">Heute</button><button class="date-nav-btn" onclick="navDay(1)">▶</button></div>
 <div class="day-indicator" id="dayIndicator"></div>
+<div id="readinessBox"></div>
 <div class="two-col"><div><div class="card"><div class="card-h">🍽 Mahlzeiten</div><div id="mealsBox"></div></div></div><div>
 <div class="card"><div class="card-h">🌙 Tages-Check-in</div>
 <div class="ci-row"><span class="ci-label">Schlucken</span><div class="emoji-row" id="swallowRow"></div></div>
 <div class="ci-row"><span class="ci-label">Eczema</span><div class="emoji-row" id="eczemaRow"></div></div>
 <div class="ci-row"><span class="ci-label">Schmerz (0-10)</span><div class="counter"><button class="c-btn" onclick="adj('pain',-1)">−</button><span class="c-val" id="painV">0</span><button class="c-btn" onclick="adj('pain',1)">+</button></div></div>
-<div class="ci-row" style="flex-direction:column;align-items:flex-start"><span class="ci-label mb6">Schwierige Texturen</span><div class="tex-chips" id="texChips"></div><div class="tex-custom-input" id="texCustomWrap"><input class="inp inp-sm mt8" id="texCustom" placeholder="Welche Textur?" oninput="scheduleDraft()"></div></div>
+<div class="ci-row" style="flex-direction:column;align-items:flex-start"><span class="ci-label mb6">Schwierige Texturen</span><div class="tex-chips" id="texChips"></div><div class="tex-custom-input" id="texCustomWrap"><input class="inp inp-sm mt8" id="texCustom" placeholder="Welche?" oninput="scheduleDraft()"></div></div>
 <div class="ci-row" style="flex-direction:column;align-items:flex-start"><span class="ci-label mb6">Vermiedene Nahrung</span><input class="inp inp-sm" id="avoided" placeholder="z.B. Brot..." oninput="scheduleDraft()"></div></div>
 <div class="card"><div class="card-h">🚨 Bolus-Ereignisse</div><div id="bolusBox"></div><button class="bolus-add-btn" onclick="addBolus()">+ Bolus-Event</button></div>
 <div class="card"><div class="card-h">💊 Medikamente</div><div id="medsBox"></div></div>
@@ -92,29 +101,27 @@ const BOLUS_RESOLVE=['💧 Wasser','🤮 Würgen','⏰ Warten','↩️ Regurgita
 const BOLUS_RESOLVE_EN={'💧 Wasser':'water','🤮 Würgen':'vomiting','⏰ Warten':'waiting','↩️ Regurgitation':'regurgitation','🏥 Notaufnahme':'ER'};
 const WEEKDAYS=['So','Mo','Di','Mi','Do','Fr','Sa'];
 const SK='eoe_v1';const ALL_OLD_KEYS=['eoe4','eoe5','eoe6','eoe7','eoe8'];
-const STATUS_INFO={
-    safe:{label:'✅ Safe',desc:'Keine Symptom-Verschlimmerung beobachtet',color:'var(--green)'},
-    trigger:{label:'❌ Trigger',desc:'Klare Symptom-Verschlimmerung – Lebensmittel meiden',color:'var(--red)'},
-    inconclusive:{label:'🤔 Unklar',desc:'Symptome aufgetreten, aber Ursache unklar – erneuter Test sinnvoll',color:'var(--purple)'},
-    queue:{label:'📋 Queue',desc:'Wartet auf Test',color:'var(--text2)'},
-    active:{label:'🔬 Wird getestet',desc:'Aktuell in Test-Phase',color:'var(--blue)'}
+const STATUS_INFO={safe:{label:'✅ Safe',desc:'Keine Symptom-Verschlimmerung beobachtet',color:'var(--green)'},trigger:{label:'❌ Trigger',desc:'Klare Symptom-Verschlimmerung – Lebensmittel meiden',color:'var(--red)'},inconclusive:{label:'🤔 Unklar',desc:'Symptome aufgetreten, aber Ursache unklar – erneuter Test sinnvoll',color:'var(--purple)'},queue:{label:'📋 Queue',desc:'Wartet auf Test',color:'var(--text2)'},active:{label:'🔬 Wird getestet',desc:'Aktuell in Test-Phase',color:'var(--blue)'}};
+// Readiness criteria
+const READINESS={
+    SWALLOW_DAYS:7, // need 7 days of swallowing=1
+    BOLUS_FREE_DAYS:21, // need 21 days without bolus
+    SCORE_DAYS:7, // 7-day average <= 2
+    SCORE_MAX:2,
+    MIN_WAIT:{safe:7,inconclusive:14,trigger:21}
 };
 let isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 let D={days:[],foods:[],phases:[],currentPhase:null,meds:[],customTextures:[],products:[],meta:{lastBackup:null,sinceBackup:0}};
 let today={swallowing:0,eczema:0,pain:0,textures:[],texCustom:'',meals:{},avoided:'',notes:'',meds:{},bolusEvents:[]};
-let draftTimer=null,scanner=null,scannerMealKey=null,selectedStatus=null,modalFoodId=null;
+let draftTimer=null,scanner=null,scannerMealKey=null,selectedStatus=null;
 
 function todayStr(){return new Date().toISOString().split('T')[0];}
-function init(){load();if(!D.foods||!D.foods.length)D.foods=DEFAULT_FOODS.map(f=>({...f,status:'queue',testHistory:[]}));if(!D.meds||!D.meds.length)D.meds=DEFAULT_MEDS.slice();if(!D.meds.find(m=>m.id==='betnovate'))D.meds.push({id:'betnovate',name:'Betnovate',dose:'0.25mg/g'});if(!D.customTextures)D.customTextures=[];if(!D.phases)D.phases=[];if(!D.products)D.products=[];if(!D.meta)D.meta={lastBackup:null,sinceBackup:0};
-// Migration: ensure all foods have testHistory array
-D.foods.forEach(f=>{if(!f.testHistory)f.testHistory=[];});
-renderMeals();renderSwallow();renderEczema();renderTextures();const el=document.getElementById('todayDate');if(!el.value)el.value=todayStr();el.addEventListener('change',loadDay);loadDay();updateAll();}
+function init(){load();if(!D.foods||!D.foods.length)D.foods=DEFAULT_FOODS.map(f=>({...f,status:'queue',testHistory:[]}));if(!D.meds||!D.meds.length)D.meds=DEFAULT_MEDS.slice();if(!D.meds.find(m=>m.id==='betnovate'))D.meds.push({id:'betnovate',name:'Betnovate',dose:'0.25mg/g'});if(!D.customTextures)D.customTextures=[];if(!D.phases)D.phases=[];if(!D.products)D.products=[];if(!D.meta)D.meta={lastBackup:null,sinceBackup:0};D.foods.forEach(f=>{if(!f.testHistory)f.testHistory=[];});renderMeals();renderSwallow();renderEczema();renderTextures();const el=document.getElementById('todayDate');if(!el.value)el.value=todayStr();el.addEventListener('change',loadDay);loadDay();updateAll();}
 function load(){try{let s=localStorage.getItem(SK);if(s){D=JSON.parse(s);return;}for(const k of ALL_OLD_KEYS){s=localStorage.getItem(k);if(s){D=JSON.parse(s);localStorage.setItem(SK,s);return;}}}catch(e){}}
 function save(){try{localStorage.setItem(SK,JSON.stringify(D));}catch(e){}}
 function addToDB(name,text,source){if(!name)return;const ex=(D.products||[]).find(p=>p.name.toLowerCase()===name.toLowerCase());if(ex){ex.usageCount=(ex.usageCount||1)+1;ex.lastUsed=todayStr();if(text&&!ex.text)ex.text=text;}else{D.products.push({id:'p_'+Date.now(),name,text:text||'',source:source||'manual',usageCount:1,lastUsed:todayStr()});}save();}
 function getTopProds(n){return[...(D.products||[])].sort((a,b)=>(b.usageCount||0)-(a.usageCount||0)).slice(0,n||8);}
 function searchProds(q){if(!q||q.length<2)return[];const lq=q.toLowerCase();return(D.products||[]).filter(p=>p.name.toLowerCase().includes(lq)).sort((a,b)=>(b.usageCount||0)-(a.usageCount||0)).slice(0,8);}
-
 function draftKey(d){return SK+'_draft_'+d;}
 function saveDraft(){gatherToday();const d=document.getElementById('todayDate').value;if(!d)return;today.date=d;today._isDraft=true;try{localStorage.setItem(draftKey(d),JSON.stringify(today));}catch(e){}showDraftBar(true);}
 function getDraft(d){try{const s=localStorage.getItem(draftKey(d));return s?JSON.parse(s):null;}catch(e){return null;}}
@@ -127,6 +134,147 @@ function navDay(o){const el=document.getElementById('todayDate');const d=new Dat
 function goToday(){document.getElementById('todayDate').value=todayStr();loadDay();}
 function updateDateUI(){const date=document.getElementById('todayDate').value;const d=new Date(date+'T12:00:00');const now=todayStr();document.getElementById('todayLabel').textContent=WEEKDAYS[d.getDay()]+', '+d.toLocaleDateString('de-DE');const btn=document.getElementById('todayBtn');btn.classList.toggle('is-today',date===now);btn.textContent=date===now?'● Heute':'Heute';const ind=document.getElementById('dayIndicator');const diff=Math.round((new Date(date+'T12:00:00')-new Date(now+'T12:00:00'))/86400000);if(diff===0)ind.className='day-indicator';else if(diff<0){ind.className='day-indicator past';ind.textContent='📅 '+Math.abs(diff)+' Tag(e) zurück';}else{ind.className='day-indicator future';ind.textContent='⚠️ Zukunft';}}
 
+// ─── READINESS LOGIC ─────────────────────
+function getLastEndedPhase(){
+    if(!D.phases.length)return null;
+    return D.phases.slice().sort((a,b)=>b.endDate.localeCompare(a.endDate))[0];
+}
+function daysBetween(d1,d2){return Math.floor((new Date(d2+'T12:00:00')-new Date(d1+'T12:00:00'))/86400000);}
+function getLastNDaysData(n){
+    const end=todayStr();
+    const start=new Date();start.setDate(start.getDate()-n+1);
+    const startStr=start.toISOString().split('T')[0];
+    const days=[];
+    for(let i=0;i<n;i++){
+        const d=new Date();d.setDate(d.getDate()-(n-1-i));
+        const ds=d.toISOString().split('T')[0];
+        const entry=D.days.find(x=>x.date===ds);
+        days.push(entry||null);
+    }
+    return days;
+}
+function calculateReadiness(){
+    // Don't show if currently in active phase
+    if(D.currentPhase&&D.currentPhase.foodId)return null;
+
+    const lastPhase=getLastEndedPhase();
+    if(!lastPhase)return null; // no previous phase, no need to show
+
+    const today=todayStr();
+    const daysSincePhase=daysBetween(lastPhase.endDate,today);
+    const minWait=READINESS.MIN_WAIT[lastPhase.result]||14;
+
+    // Check 1: Swallowing stable for last 7 days
+    const last7=getLastNDaysData(READINESS.SWALLOW_DAYS);
+    const swallowStableDays=last7.filter(d=>d&&(d.swallowing===1||d.swallowing===0)).length;
+    const swallowStable=last7.every(d=>d&&d.swallowing===1);
+
+    // Check 2: No bolus events in last 21 days
+    const last21=getLastNDaysData(READINESS.BOLUS_FREE_DAYS);
+    let lastBolusDate=null;
+    let daysSinceBolus=READINESS.BOLUS_FREE_DAYS;
+    last21.forEach((d,i)=>{
+        if(d&&d.bolusEvents&&d.bolusEvents.length>0){
+            const ds=new Date();ds.setDate(ds.getDate()-(READINESS.BOLUS_FREE_DAYS-1-i));
+            lastBolusDate=ds.toISOString().split('T')[0];
+            daysSinceBolus=daysBetween(lastBolusDate,today);
+        }
+    });
+    const bolusFree=daysSinceBolus>=READINESS.BOLUS_FREE_DAYS;
+
+    // Check 3: Score average <= 2 over last 7 days
+    const scoreDays=last7.filter(d=>d&&d.score!==undefined);
+    const avgScore=scoreDays.length>0?(scoreDays.reduce((a,b)=>a+b.score,0)/scoreDays.length):null;
+    const scoreOk=avgScore!==null&&avgScore<=READINESS.SCORE_MAX&&scoreDays.length>=5;
+
+    // Check 4: Min wait time
+    const waitOk=daysSincePhase>=minWait;
+
+    const allPass=swallowStable&&bolusFree&&scoreOk&&waitOk;
+    const passCount=[swallowStable,bolusFree,scoreOk,waitOk].filter(Boolean).length;
+
+    let status='red';
+    if(allPass)status='green';
+    else if(passCount>=2)status='yellow';
+
+    // Estimate ready date
+    let readyEstimate=null;
+    const today_obj=new Date(today+'T12:00:00');
+    const candidateDates=[];
+    if(!waitOk){
+        const d=new Date(lastPhase.endDate+'T12:00:00');
+        d.setDate(d.getDate()+minWait);
+        candidateDates.push(d);
+    }
+    if(!bolusFree&&lastBolusDate){
+        const d=new Date(lastBolusDate+'T12:00:00');
+        d.setDate(d.getDate()+READINESS.BOLUS_FREE_DAYS);
+        candidateDates.push(d);
+    }
+    if(candidateDates.length>0){
+        readyEstimate=new Date(Math.max(...candidateDates.map(d=>d.getTime())));
+    }
+
+    return {
+        status,allPass,passCount,
+        lastPhase,daysSincePhase,minWait,waitOk,
+        swallowStable,swallowStableDays,
+        bolusFree,daysSinceBolus,lastBolusDate,
+        scoreOk,avgScore,scoreDaysCount:scoreDays.length,
+        readyEstimate
+    };
+}
+
+function renderReadiness(){
+    const box=document.getElementById('readinessBox');
+    const r=calculateReadiness();
+    if(!r){box.innerHTML='';return;}
+
+    const phaseFood=D.foods.find(f=>f.id===r.lastPhase.foodId);
+    const phaseLabel=phaseFood?phaseFood.icon+' '+phaseFood.name:r.lastPhase.name;
+    const resultIcon={safe:'✅',trigger:'❌',inconclusive:'🤔'}[r.lastPhase.result]||'?';
+
+    let title,subtitle,icon;
+    if(r.status==='green'){title='Bereit für nächsten Test! 🎉';subtitle='Alle Kriterien erfüllt – du kannst loslegen';icon='🟢';}
+    else if(r.status==='yellow'){title='Fast bereit';subtitle=r.readyEstimate?`Voraussichtlich bereit am ${r.readyEstimate.toLocaleDateString('de-DE')}`:'Tracke weiter';icon='🟡';}
+    else{title='Recovery läuft';subtitle=r.readyEstimate?`Frühestens bereit am ${r.readyEstimate.toLocaleDateString('de-DE')}`:'Symptome müssen sich erst stabilisieren';icon='🔴';}
+
+    let crits='';
+
+    // Wait time
+    crits+=`<div class="rc-crit"><span class="rc-crit-ico">${r.waitOk?'✅':'⏳'}</span><div class="rc-crit-text"><strong>Mindest-Wartezeit nach ${resultIcon} ${r.lastPhase.result}</strong>${!r.waitOk?`<div class="rc-crit-progress">${r.daysSincePhase}/${r.minWait} Tage</div>`:`<div class="rc-crit-progress">Erfüllt (${r.daysSincePhase} Tage seit Phase-Ende)</div>`}</div></div>`;
+
+    // Swallowing
+    crits+=`<div class="rc-crit"><span class="rc-crit-ico">${r.swallowStable?'✅':'⏳'}</span><div class="rc-crit-text"><strong>Schlucken stabil 😊</strong>${!r.swallowStable?`<div class="rc-crit-progress">${r.swallowStableDays}/${READINESS.SWALLOW_DAYS} Tage in Folge bei 1/4</div>`:`<div class="rc-crit-progress">Erfüllt (7 Tage in Folge)</div>`}</div></div>`;
+
+    // Bolus
+    crits+=`<div class="rc-crit"><span class="rc-crit-ico">${r.bolusFree?'✅':'⏳'}</span><div class="rc-crit-text"><strong>Kein Bolus-Event</strong>${!r.bolusFree?`<div class="rc-crit-progress">${r.daysSinceBolus}/${READINESS.BOLUS_FREE_DAYS} Tage bolusfrei (Mukosa-Heilung)</div>`:`<div class="rc-crit-progress">Erfüllt (≥21 Tage)</div>`}</div></div>`;
+
+    // Score
+    const scoreText=r.avgScore!==null?r.avgScore.toFixed(1):'—';
+    crits+=`<div class="rc-crit"><span class="rc-crit-ico">${r.scoreOk?'✅':'⏳'}</span><div class="rc-crit-text"><strong>Score ≤ 2 (7-Tage ⌀)</strong><div class="rc-crit-progress">Aktuell: ${scoreText} ${r.scoreDaysCount<5?`(nur ${r.scoreDaysCount} Tage Daten)`:''}</div></div></div>`;
+
+    let actions='';
+    if(r.status==='green'){
+        actions=`<div class="rc-actions"><button class="btn btn-p" onclick="switchView('bank')">🔬 Test starten</button></div>`;
+    }else{
+        actions=`<div class="rc-actions"><button class="btn btn-g" onclick="showOverrideWarning()">⚠️ Trotzdem starten (nicht empfohlen)</button></div>`;
+    }
+
+    box.innerHTML=`<div class="readiness-card rc-${r.status}">
+        <div class="rc-header"><span class="rc-icon">${icon}</span><div><div class="rc-title">${title}</div><div class="rc-subtitle">${subtitle}</div></div></div>
+        <div class="rc-criteria">${crits}</div>
+        <div class="rc-summary">Letzte Phase: <strong>${resultIcon} ${esc(phaseLabel)}</strong> · Beendet vor ${r.daysSincePhase} Tag${r.daysSincePhase===1?'':'en'}</div>
+        ${actions}
+    </div>`;
+}
+
+function showOverrideWarning(){
+    document.getElementById('modalContent').innerHTML=`<div class="modal-title">⚠️ Frühzeitiger Test</div><div class="modal-sub">Deine Bereit-Kriterien sind noch nicht alle erfüllt.</div><div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:16px;padding:12px;background:var(--orangeA);border:1px solid rgba(245,158,11,.3);border-radius:var(--rs)">Wenn deine Speiseröhre noch nicht vollständig verheilt ist, kann ein neuer Test:<br><br>• Falsch-positive Trigger zeigen<br>• Verfälschte Ergebnisse liefern<br>• Deine Genesung verlängern<br><br><strong>Empfehlung:</strong> Warte bis alle Kriterien grün sind.</div><div class="modal-btns"><button class="btn btn-d" onclick="closeModal();switchView('bank')">Trotzdem testen</button><button class="btn btn-p" onclick="closeModal()">Lieber warten</button></div>`;
+    openModal();
+}
+
+// ─── MEALS / CHECK-IN / etc ──────────────
 function renderMeals(){const c=document.getElementById('mealsBox');c.innerHTML='';MEALS_CFG.forEach(m=>{const d=document.createElement('div');d.className='meal';d.id='meal-'+m.k;const scanBtn=isMobile?`<div class="prod-new-btn" onclick="startScanner('${m.k}')"><div class="prod-new-ico">📷</div><div class="prod-new-txt">Scan</div></div>`:'';d.innerHTML=`<div class="meal-top"><span class="meal-label">${m.l}</span><span class="meal-badge" id="tb-${m.k}" onclick="toggleTag('${m.k}')">🧪 Test</span></div><input class="meal-inp" id="mi-${m.k}" placeholder="${m.ph}" oninput="mealInput('${m.k}')"><div class="ingr-list" id="ingr-list-${m.k}"></div><button class="add-prod-btn" onclick="togglePicker('${m.k}')">📎 Zutaten-Details hinzufügen</button><div class="prod-picker" id="picker-${m.k}"><div class="prod-picker-h">⚡ Schnellauswahl</div><div class="quick-chips" id="qchips-${m.k}"></div><div class="prod-search"><input class="inp inp-sm" id="psearch-${m.k}" placeholder="🔍 Produkt suchen..." oninput="onSearch('${m.k}',this.value)"><div class="prod-search-results" id="sres-${m.k}"></div></div><div class="prod-picker-h">➕ Neues Produkt</div><div class="prod-new-btns">${scanBtn}<div class="prod-new-btn" onclick="showBCPanel('${m.k}')"><div class="prod-new-ico">🔢</div><div class="prod-new-txt">Barcode</div></div><div class="prod-new-btn" onclick="showTextPanel('${m.k}')"><div class="prod-new-ico">📋</div><div class="prod-new-txt">Text</div></div></div><div class="prod-new-panel" id="bc-panel-${m.k}"><div class="bc-row"><input class="inp inp-sm" id="bc-${m.k}" placeholder="Barcode" inputmode="numeric"><button class="btn btn-sm btn-s" onclick="searchBarcode('${m.k}')">Suchen</button></div><div class="bc-result" id="bc-res-${m.k}"></div></div><div class="prod-new-panel" id="text-panel-${m.k}"><input class="inp inp-sm mb6" id="iname-${m.k}" placeholder="Produktname"><textarea class="inp inp-sm" id="itext-${m.k}" rows="3" placeholder="Zutatenliste..."></textarea><button class="btn btn-sm btn-p mt8" onclick="saveManual('${m.k}')">Speichern</button></div></div>`;c.appendChild(d);});}
 function mealInput(k){today.meals[k]=today.meals[k]||{};today.meals[k].foods=document.getElementById('mi-'+k).value;document.getElementById('meal-'+k).classList.toggle('has-data',!!today.meals[k].foods);scheduleDraft();}
 function toggleTag(k){today.meals[k]=today.meals[k]||{};today.meals[k].isTest=!today.meals[k].isTest;document.getElementById('tb-'+k).classList.toggle('active-test',today.meals[k].isTest);scheduleDraft();}
@@ -143,7 +291,6 @@ function stopScanner(){document.getElementById('scannerOverlay').classList.remov
 async function searchBarcode(mk){const bc=document.getElementById('bc-'+mk).value.trim();if(!bc)return;const res=document.getElementById('bc-res-'+mk);res.className='bc-result vis';res.innerHTML='<div class="bc-spinner"></div>';try{const r=await fetch('https://world.openfoodfacts.org/api/v2/product/'+bc+'.json');const data=await r.json();if(data.status===1&&data.product){const p=data.product;const name=p.product_name_de||p.product_name||p.product_name_en||'?';const brand=p.brands||'';const fn=name+(brand?' ('+brand+')':'');const ingr=p.ingredients_text_de||p.ingredients_text||p.ingredients_text_en||'';if(ingr){res.className='bc-result vis found';res.dataset.name=fn;res.dataset.text=ingr;res.innerHTML=`<div style="font-size:12px;font-weight:700;color:var(--green)">✅ ${esc(fn)}</div><div style="font-size:10px;color:var(--text2);margin-top:4px;max-height:60px;overflow:hidden">${esc(ingr.substring(0,200))}</div><button class="btn btn-p btn-sm mt8" onclick="saveBCResult('${mk}')">Übernehmen</button>`;}else{res.className='bc-result vis partial';res.innerHTML=`<div style="font-size:12px;color:var(--orange)">🟡 ${esc(fn)}</div>`;}}else{res.className='bc-result vis notfound';res.innerHTML='❌ Nicht gefunden';}}catch(e){res.className='bc-result vis notfound';res.innerHTML='⚠️ Offline';}}
 function saveBCResult(mk){const res=document.getElementById('bc-res-'+mk);today.meals[mk]=today.meals[mk]||{};today.meals[mk].ingredients=today.meals[mk].ingredients||[];today.meals[mk].ingredients.push({name:res.dataset.name,text:res.dataset.text,source:'barcode'});addToDB(res.dataset.name,res.dataset.text,'barcode');document.getElementById('bc-'+mk).value='';res.className='bc-result';renderIngrList(mk);renderQuickChips(mk);scheduleDraft();showToast('✅');}
 function saveManual(mk){const name=document.getElementById('iname-'+mk).value.trim();const text=document.getElementById('itext-'+mk).value.trim();if(!name&&!text)return;today.meals[mk]=today.meals[mk]||{};today.meals[mk].ingredients=today.meals[mk].ingredients||[];today.meals[mk].ingredients.push({name:name||'Produkt',text,source:'manual'});addToDB(name||'Produkt',text,'manual');document.getElementById('iname-'+mk).value='';document.getElementById('itext-'+mk).value='';renderIngrList(mk);renderQuickChips(mk);scheduleDraft();showToast('✅');}
-
 function renderSwallow(){const c=document.getElementById('swallowRow');c.innerHTML='';SWALLOW.forEach(s=>{const b=document.createElement('button');b.className='emo-btn';b.textContent=s.e;b.onclick=()=>{today.swallowing=s.v;c.querySelectorAll('.emo-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');scheduleDraft();};c.appendChild(b);});}
 function renderEczema(){const c=document.getElementById('eczemaRow');c.innerHTML='';ECZEMA.forEach(s=>{const b=document.createElement('button');b.className='emo-btn';b.textContent=s.e;b.onclick=()=>{today.eczema=s.v;c.querySelectorAll('.emo-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');scheduleDraft();};c.appendChild(b);});}
 function renderTextures(){const c=document.getElementById('texChips');c.innerHTML='';[...TEXTURES,...(D.customTextures||[])].forEach(t=>{const b=document.createElement('button');b.className='tex-chip';b.textContent=t;b.onclick=()=>{const i=today.textures.indexOf(t);if(i>-1){today.textures.splice(i,1);b.classList.remove('active');}else{today.textures.push(t);b.classList.add('active');}scheduleDraft();};c.appendChild(b);});const sc=document.createElement('button');sc.className='tex-chip';sc.id='texSonstige';sc.textContent='+ Sonstige';sc.onclick=()=>{document.getElementById('texCustomWrap').classList.toggle('vis');sc.classList.toggle('active');};c.appendChild(sc);}
@@ -160,252 +307,38 @@ function showAddMedModal(){document.getElementById('modalContent').innerHTML='<d
 function addMed(){const n=document.getElementById('nmN').value.trim();if(!n)return;D.meds.push({id:'m_'+Date.now(),name:n,dose:document.getElementById('nmD').value.trim()});save();closeModal();renderMeds();}
 function renderMedsConfig(){const c=document.getElementById('medsConfigBox');if(!c)return;c.innerHTML=(D.meds||[]).map((m,i)=>`<div class="med-item"><div class="med-info"><div class="med-name">${esc(m.name)}</div><div class="med-dose">${esc(m.dose)}</div></div><button class="fb-act" style="color:var(--red)" onclick="delMed(${i})">✕</button></div>`).join('');}
 function delMed(i){D.meds.splice(i,1);save();renderMedsConfig();renderMeds();}
-
-function loadDay(){const date=document.getElementById('todayDate').value;if(!date)return;updateDateUI();const saved=D.days.find(x=>x.date===date);const draft=getDraft(date);if(saved&&!saved._isDraft){today=JSON.parse(JSON.stringify(saved));showDraftBar(false);}else if(draft){today=JSON.parse(JSON.stringify(draft));showDraftBar(true);}else{today={swallowing:0,eczema:0,pain:0,textures:[],texCustom:'',meals:{},avoided:'',notes:'',meds:{},bolusEvents:[]};document.getElementById('draftBar').classList.remove('vis');}populateForm();}
+function loadDay(){const date=document.getElementById('todayDate').value;if(!date)return;updateDateUI();const saved=D.days.find(x=>x.date===date);const draft=getDraft(date);if(saved&&!saved._isDraft){today=JSON.parse(JSON.stringify(saved));showDraftBar(false);}else if(draft){today=JSON.parse(JSON.stringify(draft));showDraftBar(true);}else{today={swallowing:0,eczema:0,pain:0,textures:[],texCustom:'',meals:{},avoided:'',notes:'',meds:{},bolusEvents:[]};document.getElementById('draftBar').classList.remove('vis');}populateForm();renderReadiness();}
 function populateForm(){MEALS_CFG.forEach(m=>{const md=today.meals[m.k]||{};document.getElementById('mi-'+m.k).value=md.foods||'';document.getElementById('meal-'+m.k).classList.toggle('has-data',!!(md.foods));document.getElementById('tb-'+m.k).classList.toggle('active-test',!!md.isTest);renderIngrList(m.k);});document.querySelectorAll('#swallowRow .emo-btn').forEach((b,i)=>b.classList.toggle('active',SWALLOW[i].v===today.swallowing));document.querySelectorAll('#eczemaRow .emo-btn').forEach((b,i)=>b.classList.toggle('active',ECZEMA[i].v===today.eczema));document.getElementById('painV').textContent=today.pain||0;document.querySelectorAll('#texChips .tex-chip').forEach(b=>{if(b.id!=='texSonstige')b.classList.toggle('active',(today.textures||[]).includes(b.textContent));});document.getElementById('texCustom').value=today.texCustom||'';if(today.texCustom)document.getElementById('texCustomWrap').classList.add('vis');else document.getElementById('texCustomWrap').classList.remove('vis');document.getElementById('avoided').value=today.avoided||'';document.getElementById('notes').value=today.notes||'';renderMeds();renderBolus();}
-function saveDay(){const date=document.getElementById('todayDate').value;if(!date)return;gatherToday();if(today.texCustom&&!(D.customTextures||[]).includes(today.texCustom)){D.customTextures=D.customTextures||[];D.customTextures.push(today.texCustom);}today.date=date;today.phase=D.currentPhase?D.currentPhase.name:'none';today.score=calcScore(today);delete today._isDraft;const idx=D.days.findIndex(x=>x.date===date);if(idx>-1)D.days[idx]=JSON.parse(JSON.stringify(today));else D.days.push(JSON.parse(JSON.stringify(today)));D.days.sort((a,b)=>a.date.localeCompare(b.date));D.meta.sinceBackup++;save();clearDraft(date);showDraftBar(false);showToast('✓ Gespeichert');updateAll();}
+function saveDay(){const date=document.getElementById('todayDate').value;if(!date)return;gatherToday();if(today.texCustom&&!(D.customTextures||[]).includes(today.texCustom)){D.customTextures=D.customTextures||[];D.customTextures.push(today.texCustom);}today.date=date;today.phase=D.currentPhase?D.currentPhase.name:'none';today.score=calcScore(today);delete today._isDraft;const idx=D.days.findIndex(x=>x.date===date);if(idx>-1)D.days[idx]=JSON.parse(JSON.stringify(today));else D.days.push(JSON.parse(JSON.stringify(today)));D.days.sort((a,b)=>a.date.localeCompare(b.date));D.meta.sinceBackup++;save();clearDraft(date);showDraftBar(false);showToast('✓ Gespeichert');updateAll();renderReadiness();}
 function calcScore(d){let s=0;s+=(Math.max(0,(d.swallowing||1)-1))*1.5;s+=Math.min(d.pain||0,3);(d.bolusEvents||[]).forEach(ev=>{if(ev.severity===1)s+=1;else if(ev.severity===2)s+=3;else if(ev.severity===3)s+=6;});s+=Math.min((d.textures||[]).length*.3,1.5);return Math.min(10,Math.round(s*10)/10);}
 function scoreLabel(s){if(s<=2)return'low';if(s<=5)return'moderate';if(s<=7)return'high';return'critical';}
-
 function handleImport(e){const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=function(ev){try{const imp=JSON.parse(ev.target.result);if(!imp.days){showToast('❌');return;}D=imp;if(!D.foods)D.foods=DEFAULT_FOODS.map(f=>({...f,status:'queue',testHistory:[]}));D.foods.forEach(f=>{if(!f.testHistory)f.testHistory=[];});if(!D.meds||!D.meds.length)D.meds=DEFAULT_MEDS.slice();if(!D.meds.find(m=>m.id==='betnovate'))D.meds.push({id:'betnovate',name:'Betnovate',dose:'0.25mg/g'});if(!D.customTextures)D.customTextures=[];if(!D.phases)D.phases=[];if(!D.products)D.products=[];if(!D.meta)D.meta={lastBackup:null,sinceBackup:0};save();D.days.forEach(day=>{if(day.date)clearDraft(day.date);});renderMeals();renderSwallow();renderEczema();renderTextures();const el=document.getElementById('todayDate');el.value=D.days.length?D.days[D.days.length-1].date:todayStr();loadDay();updateAll();showToast('✅ '+D.days.length+' Tage');}catch(err){showToast('❌');}};r.readAsText(file);e.target.value='';}
 function showSyncModal(){document.getElementById('modalContent').innerHTML='<div class="modal-title">☁️ Sync</div><div class="modal-btns"><button class="btn btn-p" onclick="dl(new Blob([JSON.stringify(D,null,2)],{type:\'application/json\'}),\'eoe-sync.json\');closeModal();showToast(\'📤\')">📤 Export</button><button class="btn btn-s" onclick="document.getElementById(\'syncF\').click()">📥 Import</button><button class="btn btn-g" onclick="closeModal()">Schließen</button></div><input type="file" id="syncF" accept=".json" style="display:none" onchange="handleImport(event)">';openModal();}
-
-// ─── FOOD BANK with new status system ───
-function renderBank(){const c=document.getElementById('bankContainer');const groups=[
-    {s:'active',l:'🔬 Wird getestet',cls:'fb-active'},
-    {s:'queue',l:'📋 Queue',cls:''},
-    {s:'safe',l:'✅ Safe',cls:'fb-safe'},
-    {s:'inconclusive',l:'🤔 Unklar – erneut testen',cls:'fb-inconclusive'},
-    {s:'trigger',l:'❌ Trigger',cls:'fb-trigger'}
-];let html='';groups.forEach(g=>{const items=D.foods.filter(f=>f.status===g.s);if(!items.length)return;html+=`<div class="fb-section"><div class="fb-section-h">${g.l} (${items.length})</div>${items.map(f=>{const tests=(f.testHistory||[]).length;const meta=tests>0?`${tests}x getestet`:'';return`<div class="fb-item ${g.cls}" onclick="showFoodDetail('${f.id}')"><span class="fb-ico">${f.icon}</span><div class="fb-info"><div class="fb-name">${esc(f.name)}</div>${meta?`<div class="fb-meta">${meta}</div>`:''}</div><div class="fb-actions">${g.s==='queue'?`<button class="fb-act" onclick="event.stopPropagation();startPhase('${f.id}')">Start</button>`:g.s==='active'?'<button class="fb-act" onclick="event.stopPropagation();showEndModal()">Ende</button>':g.s==='inconclusive'?`<button class="fb-act" onclick="event.stopPropagation();startPhase('${f.id}')">Erneut</button>`:''}</div></div>`;}).join('')}</div>`;});c.innerHTML=html||'<span style="color:var(--text3)">—</span>';}
-
+function renderBank(){const c=document.getElementById('bankContainer');const groups=[{s:'active',l:'🔬 Wird getestet',cls:'fb-active'},{s:'queue',l:'📋 Queue',cls:''},{s:'safe',l:'✅ Safe',cls:'fb-safe'},{s:'inconclusive',l:'🤔 Unklar – erneut testen',cls:'fb-inconclusive'},{s:'trigger',l:'❌ Trigger',cls:'fb-trigger'}];let html='';groups.forEach(g=>{const items=D.foods.filter(f=>f.status===g.s);if(!items.length)return;html+=`<div class="fb-section"><div class="fb-section-h">${g.l} (${items.length})</div>${items.map(f=>{const tests=(f.testHistory||[]).length;const meta=tests>0?`${tests}x getestet`:'';return`<div class="fb-item ${g.cls}" onclick="showFoodDetail('${f.id}')"><span class="fb-ico">${f.icon}</span><div class="fb-info"><div class="fb-name">${esc(f.name)}</div>${meta?`<div class="fb-meta">${meta}</div>`:''}</div><div class="fb-actions">${g.s==='queue'?`<button class="fb-act" onclick="event.stopPropagation();startPhase('${f.id}')">Start</button>`:g.s==='active'?'<button class="fb-act" onclick="event.stopPropagation();showEndModal()">Ende</button>':g.s==='inconclusive'?`<button class="fb-act" onclick="event.stopPropagation();startPhase('${f.id}')">Erneut</button>`:''}</div></div>`;}).join('')}</div>`;});c.innerHTML=html||'<span style="color:var(--text3)">—</span>';}
 function startPhase(id){const f=D.foods.find(x=>x.id===id);document.getElementById('modalContent').innerHTML=`<div class="modal-title">🔬 ${f.icon} ${f.name}</div><div class="modal-sub">${(f.testHistory||[]).length>0?'Erneuter Test':'Erster Test'}</div><div class="modal-row"><label>Dauer</label><select class="inp inp-sm" id="pDur"><option value="4">4 Wo</option><option value="6" selected>6 Wo</option><option value="8">8 Wo</option></select></div><div class="modal-row"><label>Ziel/Wo</label><select class="inp inp-sm" id="pGoal"><option value="3">3x</option><option value="4" selected>4x</option><option value="7">Tägl.</option></select></div><div class="modal-btns mt8"><button class="btn btn-p" onclick="confirmStart('${f.id}')">Starten</button><button class="btn btn-g" onclick="closeModal()">Abbruch</button></div>`;openModal();}
-function confirmStart(id){const f=D.foods.find(x=>x.id===id);if(D.currentPhase){const old=D.foods.find(x=>x.status==='active');if(old)old.status='queue';}D.currentPhase={name:f.name+'-Reintroduktion',foodId:f.id,startDate:todayStr(),durationWeeks:parseInt(document.getElementById('pDur').value),goalPerWeek:parseInt(document.getElementById('pGoal').value)};f.status='active';save();closeModal();updateAll();renderBank();}
-
-// ─── NEW: Phase end with 3 options ───
-function showEndModal(){
-    if(!D.currentPhase){showToast('Keine aktive Phase');return;}
-    selectedStatus=null;
-    const cp=D.currentPhase;
-    const phaseDays=D.days.filter(x=>x.phase===cp.name&&x.score!==undefined);
-    const avgScore=phaseDays.length?(phaseDays.reduce((a,b)=>a+b.score,0)/phaseDays.length).toFixed(1):'-';
-    const days=daysSince(cp.startDate);
-    document.getElementById('modalContent').innerHTML=`
-        <div class="modal-title">🏁 Phase beenden</div>
-        <div class="modal-sub">${cp.name} · Tag ${days} · ⌀ Score ${avgScore}</div>
-        <div class="status-opt" id="opt-safe" onclick="selectEndStatus('safe')">
-            <div class="status-opt-radio"></div>
-            <div class="status-opt-text">
-                <div class="status-opt-title" style="color:var(--green)">✅ Safe</div>
-                <div class="status-opt-desc">Keine klare Symptom-Verschlimmerung. Lebensmittel kann normal gegessen werden.</div>
-            </div>
-        </div>
-        <div class="status-opt" id="opt-trigger" onclick="selectEndStatus('trigger')">
-            <div class="status-opt-radio"></div>
-            <div class="status-opt-text">
-                <div class="status-opt-title" style="color:var(--red)">❌ Trigger</div>
-                <div class="status-opt-desc">Klare Verschlimmerung – Lebensmittel meiden.</div>
-            </div>
-        </div>
-        <div class="status-opt" id="opt-inconclusive" onclick="selectEndStatus('inconclusive')">
-            <div class="status-opt-radio"></div>
-            <div class="status-opt-text">
-                <div class="status-opt-title" style="color:var(--purple)">🤔 Unklar / Erneuter Test nötig</div>
-                <div class="status-opt-desc">Symptome aufgetreten, aber Ursache unklar (z.B. unsauberer Test, Confounder). Lebensmittel geht zurück in Queue.</div>
-            </div>
-        </div>
-        <div class="mt12 mb6"><label style="font-size:12px;color:var(--text2);font-weight:600">Notiz (optional)</label></div>
-        <textarea class="inp inp-sm" id="endNote" rows="3" placeholder="z.B. 'Hatte Eczema-Schub aber war auch krank diese Woche...'"></textarea>
-        <div class="modal-btns mt12">
-            <button class="btn btn-p" onclick="confirmEnd()">Bestätigen</button>
-            <button class="btn btn-g" onclick="closeModal()">Abbrechen</button>
-        </div>`;
-    openModal();
-}
+function confirmStart(id){const f=D.foods.find(x=>x.id===id);if(D.currentPhase){const old=D.foods.find(x=>x.status==='active');if(old)old.status='queue';}D.currentPhase={name:f.name+'-Reintroduktion',foodId:f.id,startDate:todayStr(),durationWeeks:parseInt(document.getElementById('pDur').value),goalPerWeek:parseInt(document.getElementById('pGoal').value)};f.status='active';save();closeModal();updateAll();renderBank();renderReadiness();}
+function showEndModal(){if(!D.currentPhase){showToast('Keine aktive Phase');return;}selectedStatus=null;const cp=D.currentPhase;const phaseDays=D.days.filter(x=>x.phase===cp.name&&x.score!==undefined);const avgScore=phaseDays.length?(phaseDays.reduce((a,b)=>a+b.score,0)/phaseDays.length).toFixed(1):'-';const days=daysSince(cp.startDate);document.getElementById('modalContent').innerHTML=`<div class="modal-title">🏁 Phase beenden</div><div class="modal-sub">${cp.name} · Tag ${days} · ⌀ Score ${avgScore}</div><div class="status-opt" id="opt-safe" onclick="selectEndStatus('safe')"><div class="status-opt-radio"></div><div class="status-opt-text"><div class="status-opt-title" style="color:var(--green)">✅ Safe</div><div class="status-opt-desc">Keine klare Verschlimmerung. Kann normal gegessen werden.</div></div></div><div class="status-opt" id="opt-trigger" onclick="selectEndStatus('trigger')"><div class="status-opt-radio"></div><div class="status-opt-text"><div class="status-opt-title" style="color:var(--red)">❌ Trigger</div><div class="status-opt-desc">Klare Verschlimmerung – meiden.</div></div></div><div class="status-opt" id="opt-inconclusive" onclick="selectEndStatus('inconclusive')"><div class="status-opt-radio"></div><div class="status-opt-text"><div class="status-opt-title" style="color:var(--purple)">🤔 Unklar / Erneuter Test nötig</div><div class="status-opt-desc">Symptome aufgetreten, aber Ursache unklar.</div></div></div><div class="mt12 mb6"><label style="font-size:12px;color:var(--text2);font-weight:600">Notiz (optional)</label></div><textarea class="inp inp-sm" id="endNote" rows="3" placeholder="z.B. 'Hatte Eczema-Schub aber war auch krank...'"></textarea><div class="modal-btns mt12"><button class="btn btn-p" onclick="confirmEnd()">Bestätigen</button><button class="btn btn-g" onclick="closeModal()">Abbrechen</button></div>`;openModal();}
 function selectEndStatus(s){selectedStatus=s;document.querySelectorAll('.status-opt').forEach(el=>el.classList.remove('selected'));document.getElementById('opt-'+s).classList.add('selected');}
-function confirmEnd(){
-    if(!selectedStatus){showToast('Bitte Ergebnis auswählen');return;}
-    const cp=D.currentPhase;if(!cp)return;
-    const note=document.getElementById('endNote').value.trim();
-    const phaseDays=D.days.filter(x=>x.phase===cp.name&&x.score!==undefined);
-    const avgScore=phaseDays.length?parseFloat((phaseDays.reduce((a,b)=>a+b.score,0)/phaseDays.length).toFixed(1)):0;
-    const f=D.foods.find(x=>x.id===cp.foodId);
-
-    // Add to phases history
-    D.phases.push({...cp,endDate:todayStr(),result:selectedStatus,avgScore,note});
-
-    // Add to food's test history
-    if(f){
-        if(!f.testHistory)f.testHistory=[];
-        f.testHistory.push({
-            startDate:cp.startDate,
-            endDate:todayStr(),
-            result:selectedStatus,
-            avgScore,
-            note,
-            durationWeeks:cp.durationWeeks
-        });
-        // Update food status
-        if(selectedStatus==='inconclusive'){
-            f.status='inconclusive';
-        }else{
-            f.status=selectedStatus;
-        }
-    }
-
-    // Handle current phase
-    if(selectedStatus==='trigger'){
-        D.currentPhase={name:'Recovery',startDate:todayStr(),durationWeeks:4};
-    }else{
-        D.currentPhase=null;
-    }
-
-    save();closeModal();updateAll();renderBank();
-    showToast(selectedStatus==='safe'?'✅ Als Safe markiert':selectedStatus==='trigger'?'❌ Als Trigger markiert':'🤔 Als Unklar markiert');
-}
-
-// ─── NEW: Food detail modal with history ───
-function showFoodDetail(foodId){
-    const f=D.foods.find(x=>x.id===foodId);if(!f)return;
-    modalFoodId=foodId;
-    const hist=f.testHistory||[];
-    let histHtml='';
-    if(hist.length===0){
-        histHtml='<div style="font-size:12px;color:var(--text3);padding:8px 0">Noch nicht getestet.</div>';
-    }else{
-        histHtml=hist.map((h,i)=>{
-            const start=new Date(h.startDate+'T12:00:00').toLocaleDateString('de-DE');
-            const end=new Date(h.endDate+'T12:00:00').toLocaleDateString('de-DE');
-            const days=Math.round((new Date(h.endDate)-new Date(h.startDate))/86400000);
-            const resultClass=h.result==='safe'?'safe':h.result==='trigger'?'trigger':'inconclusive';
-            const resultLabel=h.result==='safe'?'✅ Safe':h.result==='trigger'?'❌ Trigger':'🤔 Unklar';
-            return `<div class="th-item">
-                <div class="th-top">
-                    <span class="th-result ${resultClass}">${resultLabel}</span>
-                    <span class="th-dates">Test #${i+1}</span>
-                </div>
-                <div class="th-dates">${start} – ${end} (${days} Tage)</div>
-                <div class="th-stats">⌀ Score: ${h.avgScore||'–'}</div>
-                ${h.note?`<div class="th-note">"${esc(h.note)}"</div>`:''}
-            </div>`;
-        }).reverse().join('');
-    }
-
-    const isActive=f.status==='active';
-    const canRetest=f.status==='inconclusive'||f.status==='safe'||f.status==='trigger'||f.status==='queue';
-    const sInfo=STATUS_INFO[f.status];
-
-    document.getElementById('modalContent').innerHTML=`
-        <div class="modal-title">${f.icon} ${esc(f.name)}</div>
-        <div class="modal-sub">Status: <strong style="color:${sInfo.color}">${sInfo.label}</strong></div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:14px">${sInfo.desc}</div>
-
-        <div class="card-h" style="margin-bottom:8px">📜 Test-Historie (${hist.length})</div>
-        <div class="test-hist">${histHtml}</div>
-
-        <div class="modal-btns mt12">
-            ${isActive?'':canRetest?`<button class="btn btn-p" onclick="closeModal();startPhase('${f.id}')">🔬 ${hist.length>0?'Erneut testen':'Test starten'}</button>`:''}
-            <button class="btn btn-s" onclick="showStatusChangeModal('${f.id}')">✏️ Status manuell ändern</button>
-            <button class="btn btn-g" onclick="closeModal()">Schließen</button>
-        </div>`;
-    openModal();
-}
-
-function showStatusChangeModal(foodId){
-    const f=D.foods.find(x=>x.id===foodId);if(!f)return;
-    selectedStatus=f.status;
-    const opts=['safe','trigger','inconclusive','queue'];
-    let optsHtml=opts.map(s=>{
-        const info=STATUS_INFO[s];
-        return `<div class="status-opt ${selectedStatus===s?'selected':''}" id="sc-opt-${s}" onclick="selectChangeStatus('${s}')">
-            <div class="status-opt-radio"></div>
-            <div class="status-opt-text">
-                <div class="status-opt-title" style="color:${info.color}">${info.label}</div>
-                <div class="status-opt-desc">${info.desc}</div>
-            </div>
-        </div>`;
-    }).join('');
-
-    document.getElementById('modalContent').innerHTML=`
-        <div class="modal-title">✏️ Status ändern</div>
-        <div class="modal-sub">${f.icon} ${esc(f.name)} · Aktuell: ${STATUS_INFO[f.status].label}</div>
-        ${optsHtml}
-        <div class="mt12 mb6"><label style="font-size:12px;color:var(--text2);font-weight:600">Grund (optional)</label></div>
-        <textarea class="inp inp-sm" id="changeNote" rows="2" placeholder="Warum änderst du den Status?"></textarea>
-        <div class="modal-btns mt12">
-            <button class="btn btn-p" onclick="confirmStatusChange('${foodId}')">Speichern</button>
-            <button class="btn btn-g" onclick="showFoodDetail('${foodId}')">← Zurück</button>
-        </div>`;
-}
-
+function confirmEnd(){if(!selectedStatus){showToast('Bitte Ergebnis auswählen');return;}const cp=D.currentPhase;if(!cp)return;const note=document.getElementById('endNote').value.trim();const phaseDays=D.days.filter(x=>x.phase===cp.name&&x.score!==undefined);const avgScore=phaseDays.length?parseFloat((phaseDays.reduce((a,b)=>a+b.score,0)/phaseDays.length).toFixed(1)):0;const f=D.foods.find(x=>x.id===cp.foodId);D.phases.push({...cp,endDate:todayStr(),result:selectedStatus,avgScore,note});if(f){if(!f.testHistory)f.testHistory=[];f.testHistory.push({startDate:cp.startDate,endDate:todayStr(),result:selectedStatus,avgScore,note,durationWeeks:cp.durationWeeks});f.status=selectedStatus;}D.currentPhase=null;save();closeModal();updateAll();renderBank();renderReadiness();showToast(selectedStatus==='safe'?'✅ Als Safe markiert':selectedStatus==='trigger'?'❌ Als Trigger markiert':'🤔 Als Unklar markiert');}
+function showFoodDetail(foodId){const f=D.foods.find(x=>x.id===foodId);if(!f)return;const hist=f.testHistory||[];let histHtml='';if(hist.length===0){histHtml='<div style="font-size:12px;color:var(--text3);padding:8px 0">Noch nicht getestet.</div>';}else{histHtml=hist.map((h,i)=>{const start=new Date(h.startDate+'T12:00:00').toLocaleDateString('de-DE');const end=new Date(h.endDate+'T12:00:00').toLocaleDateString('de-DE');const days=Math.round((new Date(h.endDate)-new Date(h.startDate))/86400000);const resultClass=h.result==='safe'?'safe':h.result==='trigger'?'trigger':'inconclusive';const resultLabel=h.result==='safe'?'✅ Safe':h.result==='trigger'?'❌ Trigger':'🤔 Unklar';return `<div class="th-item"><div class="th-top"><span class="th-result ${resultClass}">${resultLabel}</span><span class="th-dates">Test #${i+1}</span></div><div class="th-dates">${start} – ${end} (${days} Tage)</div><div class="th-stats">⌀ Score: ${h.avgScore||'–'}</div>${h.note?`<div class="th-note">"${esc(h.note)}"</div>`:''}</div>`;}).reverse().join('');}const isActive=f.status==='active';const canRetest=f.status==='inconclusive'||f.status==='safe'||f.status==='trigger'||f.status==='queue';const sInfo=STATUS_INFO[f.status];document.getElementById('modalContent').innerHTML=`<div class="modal-title">${f.icon} ${esc(f.name)}</div><div class="modal-sub">Status: <strong style="color:${sInfo.color}">${sInfo.label}</strong></div><div style="font-size:11px;color:var(--text3);margin-bottom:14px">${sInfo.desc}</div><div class="card-h" style="margin-bottom:8px">📜 Test-Historie (${hist.length})</div><div class="test-hist">${histHtml}</div><div class="modal-btns mt12">${isActive?'':canRetest?`<button class="btn btn-p" onclick="closeModal();startPhase('${f.id}')">🔬 ${hist.length>0?'Erneut testen':'Test starten'}</button>`:''}<button class="btn btn-s" onclick="showStatusChangeModal('${f.id}')">✏️ Status manuell ändern</button><button class="btn btn-g" onclick="closeModal()">Schließen</button></div>`;openModal();}
+function showStatusChangeModal(foodId){const f=D.foods.find(x=>x.id===foodId);if(!f)return;selectedStatus=f.status;const opts=['safe','trigger','inconclusive','queue'];let optsHtml=opts.map(s=>{const info=STATUS_INFO[s];return `<div class="status-opt ${selectedStatus===s?'selected':''}" id="sc-opt-${s}" onclick="selectChangeStatus('${s}')"><div class="status-opt-radio"></div><div class="status-opt-text"><div class="status-opt-title" style="color:${info.color}">${info.label}</div><div class="status-opt-desc">${info.desc}</div></div></div>`;}).join('');document.getElementById('modalContent').innerHTML=`<div class="modal-title">✏️ Status ändern</div><div class="modal-sub">${f.icon} ${esc(f.name)} · Aktuell: ${STATUS_INFO[f.status].label}</div>${optsHtml}<div class="mt12 mb6"><label style="font-size:12px;color:var(--text2);font-weight:600">Grund (optional)</label></div><textarea class="inp inp-sm" id="changeNote" rows="2" placeholder="Warum änderst du den Status?"></textarea><div class="modal-btns mt12"><button class="btn btn-p" onclick="confirmStatusChange('${foodId}')">Speichern</button><button class="btn btn-g" onclick="showFoodDetail('${foodId}')">← Zurück</button></div>`;}
 function selectChangeStatus(s){selectedStatus=s;document.querySelectorAll('.status-opt').forEach(el=>el.classList.remove('selected'));const el=document.getElementById('sc-opt-'+s);if(el)el.classList.add('selected');}
-
-function confirmStatusChange(foodId){
-    if(!selectedStatus){showToast('Status auswählen');return;}
-    const f=D.foods.find(x=>x.id===foodId);if(!f)return;
-    const note=document.getElementById('changeNote').value.trim();
-    const oldStatus=f.status;
-
-    // Don't allow changing to 'active' manually
-    if(selectedStatus==='active'){showToast('Status kann nicht manuell auf "active" gesetzt werden');return;}
-
-    f.status=selectedStatus;
-
-    // Log status change in test history as a manual entry
-    if(!f.testHistory)f.testHistory=[];
-    f.testHistory.push({
-        startDate:todayStr(),
-        endDate:todayStr(),
-        result:selectedStatus,
-        avgScore:0,
-        note:'[Manuelle Änderung] '+(note||`${oldStatus} → ${selectedStatus}`),
-        manual:true
-    });
-
-    save();closeModal();renderBank();showToast('✅ Status: '+STATUS_INFO[selectedStatus].label);
-}
-
+function confirmStatusChange(foodId){if(!selectedStatus){showToast('Status auswählen');return;}const f=D.foods.find(x=>x.id===foodId);if(!f)return;const note=document.getElementById('changeNote').value.trim();const oldStatus=f.status;if(selectedStatus==='active'){showToast('Nicht möglich');return;}f.status=selectedStatus;if(!f.testHistory)f.testHistory=[];f.testHistory.push({startDate:todayStr(),endDate:todayStr(),result:selectedStatus,avgScore:0,note:'[Manuelle Änderung] '+(note||`${oldStatus} → ${selectedStatus}`),manual:true});save();closeModal();renderBank();showToast('✅ '+STATUS_INFO[selectedStatus].label);}
 function showAddFoodModal(){document.getElementById('modalContent').innerHTML='<div class="modal-title">+ Lebensmittel</div><div class="modal-row"><label>Name</label><input class="inp inp-sm" id="nfN"></div><div class="modal-row"><label>Icon</label><input class="inp inp-sm" id="nfI" value="🔹" style="width:60px"></div><div class="modal-btns mt8"><button class="btn btn-p" onclick="addFood()">OK</button><button class="btn btn-g" onclick="closeModal()">Abbruch</button></div>';openModal();}
 function addFood(){const n=document.getElementById('nfN').value.trim();if(!n)return;D.foods.push({id:'c_'+Date.now(),name:n,icon:document.getElementById('nfI').value.trim()||'🔹',status:'queue',testHistory:[]});save();closeModal();renderBank();}
-
 function renderJourney(){const c=document.getElementById('journeyPhaseInfo');if(!D.currentPhase)c.innerHTML='<span style="color:var(--text3)">Keine Phase.</span>';else{const days=daysSince(D.currentPhase.startDate);const total=(D.currentPhase.durationWeeks||6)*7;c.innerHTML=`<div style="font-weight:700">${D.currentPhase.name}</div><div style="font-size:12px;color:var(--text2)">Tag ${days}/${total}</div><div style="height:4px;background:var(--border);border-radius:2px;margin-top:8px;overflow:hidden"><div style="height:100%;background:var(--green);width:${Math.min(100,Math.round(days/total*100))}%"></div></div>`;}renderTrend();const tl=document.getElementById('timelineBox');let it=[];D.phases.forEach(p=>{const ico=p.result==='safe'?'✅':p.result==='trigger'?'❌':'🤔';const col=p.result==='safe'?'green':p.result==='trigger'?'red':'purple';it.push({date:p.startDate,title:ico+' '+p.name,sub:new Date(p.startDate+'T12:00:00').toLocaleDateString('de-DE')+(p.endDate?' – '+new Date(p.endDate+'T12:00:00').toLocaleDateString('de-DE'):''),color:col});});if(D.currentPhase)it.push({date:D.currentPhase.startDate,title:'🔬 '+D.currentPhase.name,sub:'Aktiv',color:'blue',active:true});it.sort((a,b)=>a.date.localeCompare(b.date));tl.innerHTML=it.length?it.map(x=>`<div class="tl-item"><div class="tl-dot ${x.color}${x.active?' pulse':''}"></div><div class="tl-title">${x.title}</div><div class="tl-sub">${x.sub}</div></div>`).join(''):'<span style="color:var(--text3)">—</span>';}
 function renderTrend(){const c=document.getElementById('trendChart');c.innerHTML='';const bl=getBaselineAvg();const now=new Date();for(let i=13;i>=0;i--){const d=new Date(now);d.setDate(now.getDate()-i);const ds=d.toISOString().split('T')[0];const entry=D.days.find(x=>x.date===ds);const bar=document.createElement('div');if(entry&&entry.score!==undefined){bar.style.height=Math.max(4,entry.score*6)+'px';bar.className='trend-bar '+(entry.score<=bl+.5?'g':entry.score<=bl+2?'o':'r');}else{bar.style.height='2px';bar.className='trend-bar g';bar.style.opacity='.15';}c.appendChild(bar);}}
 function getBaselineAvg(){const bl=D.days.filter(x=>(x.phase==='Recovery'||x.phase==='none')&&x.score!==undefined);return bl.length?(bl.reduce((a,b)=>a+b.score,0)/bl.length):1;}
-
 function renderMore(){document.getElementById('statsGrid').innerHTML=`<div class="stat"><div class="stat-v">${D.days.length}</div><div class="stat-l">Tage</div></div><div class="stat"><div class="stat-v">${(D.products||[]).length}</div><div class="stat-l">Produkte</div></div><div class="stat"><div class="stat-v">${D.foods.filter(f=>f.status==='safe'||f.status==='trigger').length}/${D.foods.length}</div><div class="stat-l">Final</div></div>`;updateBI();renderMedsConfig();}
 function updateBackupStatus(){const p=document.getElementById('backupPill');const n=D.meta.sinceBackup||0;p.className='pill '+(n<3?'pill-green':'pill-orange');p.textContent=n<3?'● OK':'● '+n;}
 function updateBI(){document.getElementById('backupInfo').textContent=D.meta.lastBackup?'Backup: '+new Date(D.meta.lastBackup).toLocaleDateString('de-DE'):'Noch kein Backup';}
 function doBackup(){if(!D.days.length){showToast('Keine Daten');return;}dl(new Blob([JSON.stringify(D,null,2)],{type:'application/json'}),'eoe-backup-'+todayStr()+'.json');D.meta.lastBackup=new Date().toISOString();D.meta.sinceBackup=0;save();updateBackupStatus();showToast('💾');}
-
-function exportCSV(){if(!D.days.length){showToast('Keine Daten');return;}
-    const medCols=D.meds.map(m=>m.name.replace(/[^a-zA-Z0-9]/g,'_'));
-    const headers=['Date','Phase','Phase_Day','Score_0to10','Score_Level','Swallowing','Eczema','Eczema_Level','Pain_0to10','Difficult_Textures','Bolus_Count','Bolus_Max_Severity','Bolus_Details','Breakfast_IsTest','Breakfast_Foods','Breakfast_Ingredients','Lunch_IsTest','Lunch_Foods','Lunch_Ingredients','Dinner_IsTest','Dinner_Foods','Dinner_Ingredients','Other_IsTest','Other_Foods','Other_Ingredients','Avoided_Foods','Notes',...medCols];
-    const cl=s=>(!s?'none':s.replace(/[\r\n]+/g,', ').replace(/"/g,"'").trim()||'none');
-    const ci=(m,k)=>{const ml=m[k];if(!ml||!ml.ingredients||!ml.ingredients.length)return'none';return ml.ingredients.map(i=>i.name+'['+(i.text?i.text.replace(/[\r\n]+/g,',').replace(/"/g,"'").trim():'no_list')+']').join(' | ');};
-    const rows=D.days.map(d=>{const m=d.meals||{};const be=d.bolusEvents||[];const bMax=be.length?Math.max(...be.map(e=>e.severity||0)):0;const bDet=be.length?be.map((e,i)=>'evt'+(i+1)+'(sev:'+({0:'?',1:'mild',2:'medium',3:'severe'}[e.severity||0])+'/food:'+cl(e.food)+'/dur:'+(e.duration||0)+'min/resolved:'+(e.resolve||[]).map(r=>BOLUS_RESOLVE_EN[r]||'?').join('+')+')').join(' | '):'none';const pd=D.currentPhase&&d.phase===D.currentPhase.name?Math.max(1,Math.floor((new Date(d.date+'T12:00:00')-new Date(D.currentPhase.startDate+'T12:00:00'))/86400000)+1):'?';return[d.date,cl(d.phase),pd,d.score||0,scoreLabel(d.score||0),SWALLOW_LABEL[d.swallowing||0],d.eczema||0,ECZEMA_LABEL[d.eczema||0],(d.pain||0)+'/10',(d.textures||[]).join('; ')||'none',be.length,{0:'none',1:'mild',2:'medium',3:'severe'}[bMax],bDet,(m.breakfast&&m.breakfast.isTest)?'yes':'no',cl((m.breakfast||{}).foods),ci(m,'breakfast'),(m.lunch&&m.lunch.isTest)?'yes':'no',cl((m.lunch||{}).foods),ci(m,'lunch'),(m.dinner&&m.dinner.isTest)?'yes':'no',cl((m.dinner||{}).foods),ci(m,'dinner'),(m.other&&m.other.isTest)?'yes':'no',cl((m.other||{}).foods),ci(m,'other'),cl(d.avoided),cl(d.notes),...D.meds.map(med=>((d.meds&&d.meds[med.id]&&d.meds[med.id].count)||0))];});
-
-    // Phase history summary
-    let phaseHist='# PHASE HISTORY:\n';
-    D.foods.forEach(f=>{
-        const tests=f.testHistory||[];
-        if(tests.length>0){
-            phaseHist+='# '+f.name+': status='+f.status+' | '+tests.length+'x tested\n';
-            tests.forEach((t,i)=>{
-                phaseHist+='#   Test'+(i+1)+': '+t.startDate+' to '+t.endDate+' = '+t.result+' (avg:'+t.avgScore+')'+(t.note?' note:"'+t.note.replace(/\n/g,' ')+'"':'')+'\n';
-            });
-        }
-    });
-
-    const ctx='# EOE TRACKING DATA\n# Generated: '+new Date().toISOString()+'\n# Days: '+D.days.length+' | Phase: '+(D.currentPhase?D.currentPhase.name:'none')+'\n# Score 0-10 (EOE only) | Swallowing 1-4 | Eczema 1-4 (atopic comorbidity)\n# Status values: safe=confirmed_safe, trigger=confirmed_trigger, inconclusive=needs_retest\n#\n'+phaseHist+'#\n';
-    const csv=[headers,...rows].map(r=>r.map(c=>'"'+String(c==null?'none':c).replace(/"/g,"'")+'"').join(',')).join('\n');
-    dl(new Blob(['\ufeff'+ctx+csv],{type:'text/csv;charset=utf-8'}),'eoe-ai-export-'+todayStr()+'.csv');showToast('✅ CSV');
-}
-
+function exportCSV(){if(!D.days.length){showToast('Keine Daten');return;}const medCols=D.meds.map(m=>m.name.replace(/[^a-zA-Z0-9]/g,'_'));const headers=['Date','Phase','Phase_Day','Score_0to10','Score_Level','Swallowing','Eczema','Eczema_Level','Pain_0to10','Difficult_Textures','Bolus_Count','Bolus_Max_Severity','Bolus_Details','Breakfast_IsTest','Breakfast_Foods','Breakfast_Ingredients','Lunch_IsTest','Lunch_Foods','Lunch_Ingredients','Dinner_IsTest','Dinner_Foods','Dinner_Ingredients','Other_IsTest','Other_Foods','Other_Ingredients','Avoided_Foods','Notes',...medCols];const cl=s=>(!s?'none':s.replace(/[\r\n]+/g,', ').replace(/"/g,"'").trim()||'none');const ci=(m,k)=>{const ml=m[k];if(!ml||!ml.ingredients||!ml.ingredients.length)return'none';return ml.ingredients.map(i=>i.name+'['+(i.text?i.text.replace(/[\r\n]+/g,',').replace(/"/g,"'").trim():'no_list')+']').join(' | ');};const rows=D.days.map(d=>{const m=d.meals||{};const be=d.bolusEvents||[];const bMax=be.length?Math.max(...be.map(e=>e.severity||0)):0;const bDet=be.length?be.map((e,i)=>'evt'+(i+1)+'(sev:'+({0:'?',1:'mild',2:'medium',3:'severe'}[e.severity||0])+'/food:'+cl(e.food)+'/dur:'+(e.duration||0)+'min/resolved:'+(e.resolve||[]).map(r=>BOLUS_RESOLVE_EN[r]||'?').join('+')+')').join(' | '):'none';const pd=D.currentPhase&&d.phase===D.currentPhase.name?Math.max(1,Math.floor((new Date(d.date+'T12:00:00')-new Date(D.currentPhase.startDate+'T12:00:00'))/86400000)+1):'?';return[d.date,cl(d.phase),pd,d.score||0,scoreLabel(d.score||0),SWALLOW_LABEL[d.swallowing||0],d.eczema||0,ECZEMA_LABEL[d.eczema||0],(d.pain||0)+'/10',(d.textures||[]).join('; ')||'none',be.length,{0:'none',1:'mild',2:'medium',3:'severe'}[bMax],bDet,(m.breakfast&&m.breakfast.isTest)?'yes':'no',cl((m.breakfast||{}).foods),ci(m,'breakfast'),(m.lunch&&m.lunch.isTest)?'yes':'no',cl((m.lunch||{}).foods),ci(m,'lunch'),(m.dinner&&m.dinner.isTest)?'yes':'no',cl((m.dinner||{}).foods),ci(m,'dinner'),(m.other&&m.other.isTest)?'yes':'no',cl((m.other||{}).foods),ci(m,'other'),cl(d.avoided),cl(d.notes),...D.meds.map(med=>((d.meds&&d.meds[med.id]&&d.meds[med.id].count)||0))];});let phaseHist='# PHASE HISTORY:\n';D.foods.forEach(f=>{const tests=f.testHistory||[];if(tests.length>0){phaseHist+='# '+f.name+': status='+f.status+' | '+tests.length+'x tested\n';tests.forEach((t,i)=>{phaseHist+='#   Test'+(i+1)+': '+t.startDate+' to '+t.endDate+' = '+t.result+' (avg:'+t.avgScore+')'+(t.note?' note:"'+t.note.replace(/\n/g,' ')+'"':'')+'\n';});}});const ctx='# EOE TRACKING DATA\n# Generated: '+new Date().toISOString()+'\n# Days: '+D.days.length+' | Phase: '+(D.currentPhase?D.currentPhase.name:'none')+'\n# Score 0-10 (EOE only) | Swallowing 1-4 | Eczema 1-4 (atopic comorbidity)\n# Readiness criteria: 7d swallowing=1, 21d bolus-free, 7d avg score≤2, min wait 7/14/21d\n#\n'+phaseHist+'#\n';const csv=[headers,...rows].map(r=>r.map(c=>'"'+String(c==null?'none':c).replace(/"/g,"'")+'"').join(',')).join('\n');dl(new Blob(['\ufeff'+ctx+csv],{type:'text/csv;charset=utf-8'}),'eoe-ai-export-'+todayStr()+'.csv');showToast('✅ CSV');}
 function clearAll(){if(!confirm('ALLE Daten löschen?'))return;D={days:[],foods:DEFAULT_FOODS.map(f=>({...f,status:'queue',testHistory:[]})),phases:[],currentPhase:null,meds:DEFAULT_MEDS.slice(),customTextures:[],products:[],meta:{lastBackup:null,sinceBackup:0}};save();renderMeals();renderSwallow();renderEczema();renderTextures();document.getElementById('todayDate').value=todayStr();loadDay();updateAll();showToast('✓');}
-function updateAll(){updateHeader();updateBackupStatus();}
+function updateAll(){updateHeader();updateBackupStatus();renderReadiness();}
 function updateHeader(){const cp=D.currentPhase;const s=document.getElementById('phaseStripText');const p=document.getElementById('phaseStripPct');if(!cp){s.innerHTML='<strong>Keine Phase</strong>';p.textContent='';return;}const days=daysSince(cp.startDate);const total=(cp.durationWeeks||6)*7;const pct=Math.min(100,Math.round(days/total*100));s.innerHTML=`<strong>${cp.name}</strong> · Tag ${days}/${total}`;p.textContent=pct+'%';p.style.color=pct>=100?'var(--orange)':'var(--green)';}
 function openModal(){document.getElementById('modalBg').classList.add('vis');}
-function closeModal(){document.getElementById('modalBg').classList.remove('vis');selectedStatus=null;modalFoodId=null;}
+function closeModal(){document.getElementById('modalBg').classList.remove('vis');selectedStatus=null;}
 document.getElementById('modalBg').addEventListener('click',function(e){if(e.target===this)closeModal();});
 function daysSince(ds){if(!ds)return 1;return Math.max(1,Math.floor((new Date()-new Date(ds+'T12:00:00'))/86400000)+1);}
 function dl(blob,name){const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(u);}
@@ -416,5 +349,6 @@ init();
 </script>
 </body>
 </html>
+
 
 
