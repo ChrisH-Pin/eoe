@@ -32,6 +32,13 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
 .allergen-toggle{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1.5px dashed var(--border);border-radius:var(--rr);background:none;color:var(--text3);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px;margin-left:6px}.allergen-toggle.has-tags{border-style:solid;border-color:var(--green);color:var(--green);background:var(--greenA)}
 .allergen-panel{display:none;margin-top:8px;padding:10px;background:var(--card);border:1px solid var(--border);border-radius:var(--rr)}.allergen-panel.vis{display:block}.allergen-panel-h{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}.allergen-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}@media(min-width:480px){.allergen-grid{grid-template-columns:repeat(3,1fr)}}
 .allergen-chip{display:flex;align-items:center;gap:6px;padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--rr);background:var(--bg2);cursor:pointer;font-size:12px;color:var(--text2);transition:.15s}.allergen-chip.active{background:var(--greenA);color:var(--green);border-color:var(--green)}.allergen-chip-ico{font-size:14px}
+/* Auto-detection banner */
+.detect-banner{margin-top:8px;padding:10px 12px;background:linear-gradient(135deg,rgba(168,85,247,.1),rgba(59,130,246,.08));border:1.5px solid rgba(168,85,247,.35);border-radius:var(--rs);animation:slideIn .3s ease}@keyframes slideIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.detect-header{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--purple);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.detect-text{font-size:11px;color:var(--text2);margin-bottom:8px;line-height:1.4}.detect-source{font-style:italic;color:var(--text3)}
+.detect-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}.detect-chip{display:inline-flex;align-items:center;gap:4px;padding:5px 9px;border:1.5px solid rgba(168,85,247,.4);background:rgba(168,85,247,.1);border-radius:14px;font-size:11px;font-weight:600;color:var(--purple)}
+.detect-actions{display:flex;flex-wrap:wrap;gap:6px}.detect-btn{padding:7px 12px;border-radius:var(--rr);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;border:1.5px solid var(--border)}.detect-btn-p{background:var(--green);color:#000;border-color:var(--green)}.detect-btn-s{background:transparent;color:var(--text2);border-color:var(--border2)}.detect-btn-g{background:transparent;color:var(--text3);border-color:var(--border)}
+.allergen-chip.suggested{background:rgba(168,85,247,.08);border-color:rgba(168,85,247,.4);color:var(--purple)}.allergen-chip.suggested::before{content:'🤖 ';font-size:10px}
 .prod-picker{display:none;margin-top:10px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:var(--rs)}.prod-picker.vis{display:block}.prod-picker-h{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
 .quick-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}.quick-chip{padding:6px 10px;border:1.5px solid var(--border);border-radius:14px;font-size:11px;color:var(--text2);cursor:pointer;background:var(--bg2);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .prod-search{position:relative;margin-bottom:8px}.prod-search-results{position:absolute;top:100%;left:0;right:0;background:var(--card);border:1px solid var(--border);border-radius:var(--rr);max-height:180px;overflow-y:auto;z-index:50;display:none;margin-top:4px}.prod-search-results.vis{display:block}.psr-item{padding:10px 12px;cursor:pointer;border-bottom:1px solid var(--border)}.psr-item-name{font-size:12px;font-weight:600}.psr-item-text{font-size:10px;color:var(--text3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -109,7 +116,6 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var
 <div class="nav"><div class="nav-inner"><button class="nav-btn active" onclick="switchView('today')" id="nav-today"><span class="nav-ico">📝</span>Heute</button><button class="nav-btn" onclick="switchView('bank')" id="nav-bank"><span class="nav-ico">🎯</span>Foods</button><button class="nav-btn" onclick="switchView('journey')" id="nav-journey"><span class="nav-ico">📈</span>Journey</button><button class="nav-btn" onclick="switchView('more')" id="nav-more"><span class="nav-ico">⚙️</span>Mehr</button></div></div>
 <script>
 const TEXTURES=['Trockenes Fleisch','Brot/Toast','Reis','Rohes Gemüse','Tabletten','Pasta','Nüsse','Chips'];
-const TEXTURE_MAP={'Trockenes Fleisch':'tough','Brot/Toast':'dense','Reis':'sticky','Rohes Gemüse':'crunchy','Tabletten':'dry','Pasta':'normal','Nüsse':'crunchy','Chips':'crunchy'};
 const SWALLOW=[{v:1,e:'😊'},{v:2,e:'😐'},{v:3,e:'😟'},{v:4,e:'😫'}];
 const ECZEMA=[{v:1,e:'😊'},{v:2,e:'😐'},{v:3,e:'😟'},{v:4,e:'😫'}];
 const MEALS_CFG=[{k:'breakfast',l:'Frühstück',ph:'Was gab es zum Frühstück?',time:'08:00'},{k:'lunch',l:'Mittagessen',ph:'Was gab es zum Mittag?',time:'12:30'},{k:'dinner',l:'Abendessen',ph:'Was gab es zum Abendessen?',time:'19:00'},{k:'other',l:'Snacks',ph:'Snacks...',time:'15:00'}];
@@ -122,7 +128,6 @@ const SK='eoe_v1';const ALL_OLD_KEYS=['eoe4','eoe5','eoe6','eoe7','eoe8'];
 const STATUS_INFO={safe:{label:'✅ Safe',desc:'Keine Symptom-Verschlimmerung',color:'var(--green)'},trigger:{label:'❌ Trigger',desc:'Verursacht Symptome',color:'var(--red)'},inconclusive:{label:'🤔 Unklar',desc:'Erneuter Test sinnvoll',color:'var(--purple)'},queue:{label:'📋 Queue',desc:'Wartet auf Test',color:'var(--text2)'},active:{label:'🔬 Wird getestet',desc:'Aktuell in Test-Phase',color:'var(--blue)'}};
 const READINESS={SWALLOW_DAYS:7,BOLUS_FREE_DAYS:21,SCORE_DAYS:7,SCORE_MAX:2,MIN_WAIT:{safe:7,inconclusive:14,trigger:21}};
 
-// ALLERGEN TAGS
 const ALLERGEN_TAGS=[
     {id:'dairy',label:'Dairy',icon:'🥛',phaseId:'dairy'},
     {id:'wheat_gluten',label:'Wheat',icon:'🌾',phaseId:'wheat'},
@@ -139,7 +144,54 @@ const ALLERGEN_TAGS=[
     {id:'high_sugar',label:'Sugar',icon:'🍬'}
 ];
 
-// PHASE → diet_phase mapping
+// AUTO-DETECTION KEYWORDS (with negative lookbehind for problematic cases)
+const ALLERGEN_KEYWORDS={
+    dairy:{
+        positive:/(?:^|[^a-z])(milch|joghurt|jogurt|käse|butter|sahne|quark|kefir|yogurt|yoghurt|milk|cheese|cream|dairy|mozzarella|parmesan|cheddar|feta|ricotta|frischkäse|hüttenkäse|skyr|crème|halloumi|burrata|mascarpone|camembert|brie|gouda|emmentaler|raclette|fondue|tzatziki|latte|cappuccino|kaffeesahne|kondensmilch|kakao mit milch|kuhmilch|ziegenmilch|schafsmilch)/i,
+        negative:/(?:hafer|soja|mandel|kokos|reis|cashew|hanf)(?:milch|drink)|pflanzenmilch|pflanzlich|laktosefrei|laktose-frei|vegan|plant.based|oat.milk|soy.milk|almond.milk|coconut.milk|rice.milk/i
+    },
+    wheat_gluten:{
+        positive:/(?:^|[^a-z])(weizen|wheat|brot|bread|pasta|nudeln|gluten|mehl|flour|brötchen|toast|pizza|knödel|kuchen|kekse|cookies|bagel|croissant|cracker|müsli|granola|gerste|barley|roggen|rye|dinkel|spelt|grieß|semolina|spaghetti|penne|fusilli|lasagne|tortellini|ravioli|gnocchi|pfannkuchen|waffeln|muffin|donut|pretzel|brezel)/i,
+        negative:/glutenfrei|gluten-frei|gluten.free|reis-pasta|reisnudeln|buchweizen.pasta/i
+    },
+    egg:{
+        positive:/(?:^|[^a-z])(\bei\b|eier|egg|eiweiß|eigelb|omelette|rührei|spiegelei|mayo|mayonnaise|carbonara|aioli|hollandaise|frittata|quiche|french toast|crepe|crêpe|meringue|baiser|eierkuchen|eiernudeln)/i,
+        negative:/eierloss|eiweiss-frei|egg.free|eifrei/i
+    },
+    soy:{
+        positive:/(?:^|[^a-z])(soja|soy|tofu|tempeh|edamame|miso|sojasauce|sojamilch|soy.sauce|soja-milch|soja.protein|tamari|natto|sojabohnen)/i
+    },
+    nuts:{
+        positive:/(?:^|[^a-z])(nuss|nüsse|nut|mandel|almond|walnut|walnuss|cashew|hazelnut|haselnuss|pistazie|pistachio|pecan|macadamia|pinienkern|pine.nut|brazil.nut|paranuss|nutella|marzipan|nougat|nussmus)/i,
+        negative:/nussfrei|nut.free|kokosnuss|coconut|muskatnuss|nutmeg|erdnuss|peanut/i
+    },
+    fish_shellfish:{
+        positive:/(?:^|[^a-z])(fisch|fish|lachs|salmon|thunfisch|tuna|hering|herring|kabeljau|cod|krabbe|crab|shrimp|garnele|prawn|hummer|lobster|muschel|mussel|tintenfisch|squid|octopus|sushi|sashimi|scampi|forelle|trout|makrele|mackerel|sardine|anchovis|anchovy|ceviche|fischstäbchen)/i
+    },
+    legumes_pea:{
+        positive:/(?:^|[^a-z])(erbse|pea|linse|lentil|kicher|chickpea|garbanzo|bohne|bean|hummus|falafel|kidney|lupin|lupine|sojabohne|edamame|dal|daal|pinto|cannellini|borlotti|adzuki|mungo)/i,
+        negative:/sojabohne|edamame|grüne.bohne|prinzessbohnen|stangenbohnen/i
+    },
+    oats:{
+        positive:/(?:^|[^a-z])(hafer|oat|porridge|haferflocken|oatmeal|hafermilch|oat.milk|oat.bread|haferdrink)/i
+    },
+    corn:{
+        positive:/(?:^|[^a-z])(\bmais\b|corn|polenta|cornflakes|tortilla|popcorn|maiskolben|maisstärke|cornstarch|maisgrieß|nachos|tacos)/i
+    },
+    rice:{
+        positive:/(?:^|[^a-z])(reis|rice|risotto|sushi|jasmin|basmati|wildreis|milchreis|reisnudeln|reismilch|reiswaffeln|paella|reispudding|reisbrei)/i
+    },
+    potato:{
+        positive:/(?:^|[^a-z])(kartoffel|potato|pommes|fries|chips|gnocchi|rösti|potato.salad|kartoffelsalat|kartoffelpüree|mashed.potato|bratkartoffel|ofenkartoffel|backkartoffel|sweet.potato|süßkartoffel)/i
+    },
+    tomato:{
+        positive:/(?:^|[^a-z])(tomate|tomato|ketchup|marinara|passata|pomodori|tomatensauce|tomatensoße|tomato.sauce|cherrytomate|sugo)/i
+    },
+    high_sugar:{
+        positive:/(?:^|[^a-z])(zucker|sugar|sirup|syrup|honig|honey|schokolade|chocolate|kuchen|cake|kekse|cookies|eis|ice.cream|dessert|süßigkeit|candy|nutella|marmelade|jam|gummibär|gummibärchen|bonbon|lollipop|donut|cola|limonade|lemonade|fanta|sprite|softdrink|smoothie|fruchtsaft.gesüßt)/i
+    }
+};
+
 const PHASE_TO_DIET={dairy:'dairy_challenge',wheat:'wheat_gluten_challenge',egg:'egg_challenge',soy:'soy_challenge',nuts:'nuts_challenge',fish:'fish_shellfish_challenge',legumes:'legumes_pea_challenge'};
 
 let isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -147,6 +199,7 @@ let D={days:[],foods:[],phases:[],currentPhase:null,meds:[],customTextures:[],pr
 let today={swallowing:0,eczema:0,pain:0,textures:[],texCustom:'',meals:{},avoided:'',notes:'',meds:{},bolusEvents:[]};
 let draftTimer=null,scanner=null,scannerMealKey=null,selectedStatus=null;
 let folderHandles={backup:null,csv:null};
+let detectTimers={};
 const FSA_SUPPORTED=typeof window.showDirectoryPicker==='function';
 
 function todayStr(){return new Date().toISOString().split('T')[0];}
@@ -203,20 +256,143 @@ function calculateReadiness(){if(D.currentPhase&&D.currentPhase.foodId)return nu
 function renderReadiness(){const box=document.getElementById('readinessBox');const r=calculateReadiness();if(!r){box.innerHTML='';return;}const phaseFood=D.foods.find(f=>f.id===r.lastPhase.foodId);const phaseLabel=phaseFood?phaseFood.icon+' '+phaseFood.name:r.lastPhase.name;const resultIcon={safe:'✅',trigger:'❌',inconclusive:'🤔'}[r.lastPhase.result]||'?';let title,subtitle,icon;if(r.status==='green'){title='Bereit für nächsten Test! 🎉';subtitle='Alle Kriterien erfüllt';icon='🟢';}else if(r.status==='yellow'){title='Fast bereit';subtitle=r.readyEstimate?`Voraussichtlich bereit am ${r.readyEstimate.toLocaleDateString('de-DE')}`:'Tracke weiter';icon='🟡';}else{title='Recovery läuft';subtitle=r.readyEstimate?`Frühestens bereit am ${r.readyEstimate.toLocaleDateString('de-DE')}`:'Symptome müssen sich stabilisieren';icon='🔴';}let crits='';crits+=`<div class="rc-crit"><span class="rc-crit-ico">${r.waitOk?'✅':'⏳'}</span><div class="rc-crit-text"><strong>Mindest-Wartezeit nach ${resultIcon} ${r.lastPhase.result}</strong>${!r.waitOk?`<div class="rc-crit-progress">${r.daysSincePhase}/${r.minWait} Tage</div>`:`<div class="rc-crit-progress">Erfüllt (${r.daysSincePhase} Tage)</div>`}</div></div>`;crits+=`<div class="rc-crit"><span class="rc-crit-ico">${r.swallowStable?'✅':'⏳'}</span><div class="rc-crit-text"><strong>Schlucken stabil 😊</strong>${!r.swallowStable?`<div class="rc-crit-progress">${r.swallowStableDays}/${READINESS.SWALLOW_DAYS} Tage in Folge</div>`:`<div class="rc-crit-progress">Erfüllt</div>`}</div></div>`;crits+=`<div class="rc-crit"><span class="rc-crit-ico">${r.bolusFree?'✅':'⏳'}</span><div class="rc-crit-text"><strong>Kein Bolus-Event</strong>${!r.bolusFree?`<div class="rc-crit-progress">${r.daysSinceBolus}/${READINESS.BOLUS_FREE_DAYS} Tage bolusfrei</div>`:`<div class="rc-crit-progress">Erfüllt (≥21 Tage)</div>`}</div></div>`;const scoreText=r.avgScore!==null?r.avgScore.toFixed(1):'—';crits+=`<div class="rc-crit"><span class="rc-crit-ico">${r.scoreOk?'✅':'⏳'}</span><div class="rc-crit-text"><strong>Score ≤ 2 (7-Tage ⌀)</strong><div class="rc-crit-progress">Aktuell: ${scoreText}</div></div></div>`;let actions='';if(r.status==='green'){actions=`<div class="rc-actions"><button class="btn btn-p" onclick="switchView('bank')">🔬 Test starten</button></div>`;}else{actions=`<div class="rc-actions"><button class="btn btn-g" onclick="showOverrideWarning()">⚠️ Trotzdem starten</button></div>`;}box.innerHTML=`<div class="readiness-card rc-${r.status}"><div class="rc-header"><span class="rc-icon">${icon}</span><div><div class="rc-title">${title}</div><div class="rc-subtitle">${subtitle}</div></div></div><div class="rc-criteria">${crits}</div><div class="rc-summary">Letzte Phase: <strong>${resultIcon} ${esc(phaseLabel)}</strong> · Beendet vor ${r.daysSincePhase} Tag${r.daysSincePhase===1?'':'en'}</div>${actions}</div>`;}
 function showOverrideWarning(){document.getElementById('modalContent').innerHTML=`<div class="modal-title">⚠️ Frühzeitiger Test</div><div class="modal-sub">Bereit-Kriterien noch nicht alle erfüllt.</div><div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:16px;padding:12px;background:var(--orangeA);border:1px solid rgba(245,158,11,.3);border-radius:var(--rs)">Risiken:<br>• Falsch-positive Trigger<br>• Verfälschte Ergebnisse<br><br><strong>Empfehlung:</strong> Warte bis grün.</div><div class="modal-btns"><button class="btn btn-d" onclick="closeModal();switchView('bank')">Trotzdem testen</button><button class="btn btn-p" onclick="closeModal()">Lieber warten</button></div>`;openModal();}
 
-// ─── MEALS with ALLERGEN TAGS ───
+// ─── AUTO-DETECTION ─────────────────────────
+function detectAllergensInText(text){
+    if(!text||text.length<2)return[];
+    const detected=[];
+    Object.entries(ALLERGEN_KEYWORDS).forEach(([id,patterns])=>{
+        const hasNegative=patterns.negative&&patterns.negative.test(text);
+        const hasPositive=patterns.positive.test(text);
+        // Special case for dairy: positive only counts if no negative match (e.g. "Hafermilch")
+        if(id==='dairy'){
+            if(hasPositive&&!hasNegative)detected.push(id);
+        }else{
+            if(hasPositive&&!hasNegative)detected.push(id);
+        }
+    });
+    return detected;
+}
+
+function getMealSearchText(meal){
+    let t=(meal.foods||'')+' ';
+    if(meal.ingredients){
+        meal.ingredients.forEach(ing=>{
+            t+=(ing.name||'')+' '+(ing.text||'')+' ';
+        });
+    }
+    return t.toLowerCase();
+}
+
+function runDetectionForMeal(mk){
+    const meal=today.meals[mk]||{};
+    const text=getMealSearchText(meal);
+    if(!text.trim()){clearDetectionBanner(mk);return;}
+
+    const detected=detectAllergensInText(text);
+    const currentTags=meal.allergens||[];
+    const ignored=meal.ignoredSuggestions||[];
+
+    // Show only NEW suggestions (diff)
+    const newSuggestions=detected.filter(d=>!currentTags.includes(d)&&!ignored.includes(d));
+
+    if(newSuggestions.length===0){
+        clearDetectionBanner(mk);
+        return;
+    }
+
+    showDetectionBanner(mk,newSuggestions,text);
+}
+
+function showDetectionBanner(mk,suggestions,sourceText){
+    let banner=document.getElementById('detect-'+mk);
+    if(!banner){
+        const meal=document.getElementById('meal-'+mk);
+        if(!meal)return;
+        banner=document.createElement('div');
+        banner.id='detect-'+mk;
+        banner.className='detect-banner';
+        // Insert after meal input area
+        const allergenPanel=document.getElementById('apanel-'+mk);
+        meal.insertBefore(banner,allergenPanel);
+    }
+
+    const chips=suggestions.map(id=>{
+        const tag=ALLERGEN_TAGS.find(a=>a.id===id);
+        return `<span class="detect-chip">${tag.icon} ${tag.label}</span>`;
+    }).join('');
+
+    const sourcePreview=sourceText.length>50?sourceText.substring(0,50)+'…':sourceText;
+
+    banner.innerHTML=`
+        <div class="detect-header">🤖 Auto-Detection</div>
+        <div class="detect-text">Erkannt aus <span class="detect-source">"${esc(sourcePreview.trim())}"</span>:</div>
+        <div class="detect-chips">${chips}</div>
+        <div class="detect-actions">
+            <button class="detect-btn detect-btn-p" onclick="acceptAllSuggestions('${mk}',${JSON.stringify(suggestions).replace(/"/g,'&quot;')})">✓ Alle übernehmen</button>
+            <button class="detect-btn detect-btn-s" onclick="editSuggestions('${mk}',${JSON.stringify(suggestions).replace(/"/g,'&quot;')})">Bearbeiten</button>
+            <button class="detect-btn detect-btn-g" onclick="ignoreSuggestions('${mk}',${JSON.stringify(suggestions).replace(/"/g,'&quot;')})">✕ Ignorieren</button>
+        </div>
+    `;
+}
+
+function clearDetectionBanner(mk){
+    const banner=document.getElementById('detect-'+mk);
+    if(banner)banner.remove();
+}
+
+function acceptAllSuggestions(mk,suggestions){
+    today.meals[mk]=today.meals[mk]||{};
+    today.meals[mk].allergens=today.meals[mk].allergens||[];
+    suggestions.forEach(s=>{if(!today.meals[mk].allergens.includes(s))today.meals[mk].allergens.push(s);});
+    clearDetectionBanner(mk);
+    renderAllergenGrid(mk);
+    scheduleDraft();
+    showToast('✅ '+suggestions.length+' Tag(s) übernommen');
+}
+
+function editSuggestions(mk,suggestions){
+    today.meals[mk]=today.meals[mk]||{};
+    today.meals[mk].allergens=today.meals[mk].allergens||[];
+    today.meals[mk].pendingSuggestions=suggestions;
+    // Pre-fill all suggestions
+    suggestions.forEach(s=>{if(!today.meals[mk].allergens.includes(s))today.meals[mk].allergens.push(s);});
+    clearDetectionBanner(mk);
+    // Open the panel for editing
+    const panel=document.getElementById('apanel-'+mk);
+    if(panel)panel.classList.add('vis');
+    renderAllergenGrid(mk);
+    scheduleDraft();
+    showToast('✏️ Vorschläge übernommen – Korrigiere bei Bedarf');
+}
+
+function ignoreSuggestions(mk,suggestions){
+    today.meals[mk]=today.meals[mk]||{};
+    today.meals[mk].ignoredSuggestions=today.meals[mk].ignoredSuggestions||[];
+    suggestions.forEach(s=>{if(!today.meals[mk].ignoredSuggestions.includes(s))today.meals[mk].ignoredSuggestions.push(s);});
+    clearDetectionBanner(mk);
+    scheduleDraft();
+}
+
+function scheduleDetection(mk){
+    clearTimeout(detectTimers[mk]);
+    detectTimers[mk]=setTimeout(()=>runDetectionForMeal(mk),1500);
+}
+
+// ─── MEALS ──────────────────────────────
 function renderMeals(){const c=document.getElementById('mealsBox');c.innerHTML='';MEALS_CFG.forEach(m=>{const d=document.createElement('div');d.className='meal';d.id='meal-'+m.k;const scanBtn=isMobile?`<div class="prod-new-btn" onclick="startScanner('${m.k}')"><div class="prod-new-ico">📷</div><div class="prod-new-txt">Scan</div></div>`:'';d.innerHTML=`<div class="meal-top"><span class="meal-label">${m.l}</span><span class="meal-badge" id="tb-${m.k}" onclick="toggleTag('${m.k}')">🧪 Test</span></div><input class="meal-inp" id="mi-${m.k}" placeholder="${m.ph}" oninput="mealInput('${m.k}')"><div class="ingr-list" id="ingr-list-${m.k}"></div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"><button class="add-prod-btn" onclick="togglePicker('${m.k}')">📎 Zutaten-Details</button><button class="allergen-toggle" id="atog-${m.k}" onclick="toggleAllergens('${m.k}')">🏷 Allergene <span id="acount-${m.k}">(0)</span> ▾</button></div><div class="allergen-panel" id="apanel-${m.k}"><div class="allergen-panel-h">🏷 Was war in dieser Mahlzeit enthalten?</div><div class="allergen-grid" id="agrid-${m.k}"></div></div><div class="prod-picker" id="picker-${m.k}"><div class="prod-picker-h">⚡ Schnellauswahl</div><div class="quick-chips" id="qchips-${m.k}"></div><div class="prod-search"><input class="inp inp-sm" id="psearch-${m.k}" placeholder="🔍 Suchen..." oninput="onSearch('${m.k}',this.value)"><div class="prod-search-results" id="sres-${m.k}"></div></div><div class="prod-picker-h">➕ Neues Produkt</div><div class="prod-new-btns">${scanBtn}<div class="prod-new-btn" onclick="showBCPanel('${m.k}')"><div class="prod-new-ico">🔢</div><div class="prod-new-txt">Barcode</div></div><div class="prod-new-btn" onclick="showTextPanel('${m.k}')"><div class="prod-new-ico">📋</div><div class="prod-new-txt">Text</div></div></div><div class="prod-new-panel" id="bc-panel-${m.k}"><div class="bc-row"><input class="inp inp-sm" id="bc-${m.k}" placeholder="Barcode" inputmode="numeric"><button class="btn btn-sm btn-s" onclick="searchBarcode('${m.k}')">Suchen</button></div><div class="bc-result" id="bc-res-${m.k}"></div></div><div class="prod-new-panel" id="text-panel-${m.k}"><input class="inp inp-sm mb6" id="iname-${m.k}" placeholder="Produktname"><textarea class="inp inp-sm" id="itext-${m.k}" rows="3" placeholder="Zutatenliste..."></textarea><button class="btn btn-sm btn-p mt8" onclick="saveManual('${m.k}')">Speichern</button></div></div>`;c.appendChild(d);renderAllergenGrid(m.k);});}
-function renderAllergenGrid(mk){const c=document.getElementById('agrid-'+mk);if(!c)return;const allergens=(today.meals[mk]&&today.meals[mk].allergens)||[];c.innerHTML=ALLERGEN_TAGS.map(a=>`<div class="allergen-chip${allergens.includes(a.id)?' active':''}" onclick="toggleAllergen('${mk}','${a.id}')"><span class="allergen-chip-ico">${a.icon}</span>${a.label}</div>`).join('');updateAllergenCount(mk);}
-function toggleAllergen(mk,aid){today.meals[mk]=today.meals[mk]||{};today.meals[mk].allergens=today.meals[mk].allergens||[];const idx=today.meals[mk].allergens.indexOf(aid);if(idx>-1)today.meals[mk].allergens.splice(idx,1);else today.meals[mk].allergens.push(aid);renderAllergenGrid(mk);scheduleDraft();}
+function renderAllergenGrid(mk){const c=document.getElementById('agrid-'+mk);if(!c)return;const allergens=(today.meals[mk]&&today.meals[mk].allergens)||[];const pending=(today.meals[mk]&&today.meals[mk].pendingSuggestions)||[];c.innerHTML=ALLERGEN_TAGS.map(a=>{const isActive=allergens.includes(a.id);const isSuggested=pending.includes(a.id);return `<div class="allergen-chip${isActive?' active':''}${isSuggested&&isActive?' suggested':''}" onclick="toggleAllergen('${mk}','${a.id}')"><span class="allergen-chip-ico">${a.icon}</span>${a.label}</div>`;}).join('');updateAllergenCount(mk);}
+function toggleAllergen(mk,aid){today.meals[mk]=today.meals[mk]||{};today.meals[mk].allergens=today.meals[mk].allergens||[];const idx=today.meals[mk].allergens.indexOf(aid);if(idx>-1){today.meals[mk].allergens.splice(idx,1);// User explicitly removed - add to ignored to prevent re-suggesting
+today.meals[mk].ignoredSuggestions=today.meals[mk].ignoredSuggestions||[];if(!today.meals[mk].ignoredSuggestions.includes(aid))today.meals[mk].ignoredSuggestions.push(aid);}else{today.meals[mk].allergens.push(aid);// User added - remove from ignored if present
+if(today.meals[mk].ignoredSuggestions){today.meals[mk].ignoredSuggestions=today.meals[mk].ignoredSuggestions.filter(x=>x!==aid);}}renderAllergenGrid(mk);scheduleDraft();}
 function toggleAllergens(mk){const p=document.getElementById('apanel-'+mk);p.classList.toggle('vis');}
 function updateAllergenCount(mk){const allergens=(today.meals[mk]&&today.meals[mk].allergens)||[];const countEl=document.getElementById('acount-'+mk);const togBtn=document.getElementById('atog-'+mk);if(countEl)countEl.textContent='('+allergens.length+')';if(togBtn)togBtn.classList.toggle('has-tags',allergens.length>0);}
-function mealInput(k){today.meals[k]=today.meals[k]||{};today.meals[k].foods=document.getElementById('mi-'+k).value;document.getElementById('meal-'+k).classList.toggle('has-data',!!today.meals[k].foods);scheduleDraft();}
-function toggleTag(k){today.meals[k]=today.meals[k]||{};today.meals[k].isTest=!today.meals[k].isTest;document.getElementById('tb-'+k).classList.toggle('active-test',today.meals[k].isTest);
-// SMART DEFAULT: Wenn als Test markiert UND aktive Phase, automatisch Allergen vom Test-Food vorausfüllen
-if(today.meals[k].isTest&&D.currentPhase&&D.currentPhase.foodId){const allergenTag=ALLERGEN_TAGS.find(a=>a.phaseId===D.currentPhase.foodId);if(allergenTag){today.meals[k].allergens=today.meals[k].allergens||[];if(!today.meals[k].allergens.includes(allergenTag.id)){today.meals[k].allergens.push(allergenTag.id);renderAllergenGrid(k);showToast('🏷 '+allergenTag.icon+' '+allergenTag.label+' automatisch markiert');}}}
-scheduleDraft();}
+function mealInput(k){today.meals[k]=today.meals[k]||{};const oldFoods=today.meals[k].foods||'';const newFoods=document.getElementById('mi-'+k).value;today.meals[k].foods=newFoods;document.getElementById('meal-'+k).classList.toggle('has-data',!!newFoods);// Reset ignored suggestions if text changed significantly
+if(oldFoods!==newFoods&&Math.abs(oldFoods.length-newFoods.length)>3){today.meals[k].ignoredSuggestions=[];}scheduleDraft();scheduleDetection(k);}
+function toggleTag(k){today.meals[k]=today.meals[k]||{};today.meals[k].isTest=!today.meals[k].isTest;document.getElementById('tb-'+k).classList.toggle('active-test',today.meals[k].isTest);if(today.meals[k].isTest&&D.currentPhase&&D.currentPhase.foodId){const allergenTag=ALLERGEN_TAGS.find(a=>a.phaseId===D.currentPhase.foodId);if(allergenTag){today.meals[k].allergens=today.meals[k].allergens||[];if(!today.meals[k].allergens.includes(allergenTag.id)){today.meals[k].allergens.push(allergenTag.id);renderAllergenGrid(k);showToast('🏷 '+allergenTag.icon+' '+allergenTag.label+' automatisch markiert');}}}scheduleDraft();}
 function togglePicker(mk){const p=document.getElementById('picker-'+mk);if(p.classList.toggle('vis'))renderQuickChips(mk);}
 function renderQuickChips(mk){const c=document.getElementById('qchips-'+mk);const top=getTopProds(8);c.innerHTML=top.length?top.map(p=>`<div class="quick-chip" onclick="pickProd('${mk}','${p.id}')">${esc(p.name.length>22?p.name.substring(0,20)+'…':p.name)}</div>`).join(''):'<span style="font-size:11px;color:var(--text3)">Noch keine Produkte</span>';}
-function pickProd(mk,pid){const p=(D.products||[]).find(x=>x.id===pid);if(!p)return;today.meals[mk]=today.meals[mk]||{};today.meals[mk].ingredients=today.meals[mk].ingredients||[];today.meals[mk].ingredients.push({name:p.name,text:p.text||'',source:p.source||'manual'});p.usageCount=(p.usageCount||1)+1;p.lastUsed=todayStr();save();renderIngrList(mk);renderQuickChips(mk);scheduleDraft();showToast('✅ '+p.name);}
+function pickProd(mk,pid){const p=(D.products||[]).find(x=>x.id===pid);if(!p)return;today.meals[mk]=today.meals[mk]||{};today.meals[mk].ingredients=today.meals[mk].ingredients||[];today.meals[mk].ingredients.push({name:p.name,text:p.text||'',source:p.source||'manual'});p.usageCount=(p.usageCount||1)+1;p.lastUsed=todayStr();save();renderIngrList(mk);renderQuickChips(mk);scheduleDraft();showToast('✅ '+p.name);// Trigger detection immediately on ingredient add
+runDetectionForMeal(mk);}
 function onSearch(mk,val){const r=document.getElementById('sres-'+mk);if(!val||val.length<2){r.className='prod-search-results';return;}const res=searchProds(val);if(!res.length){r.className='prod-search-results';return;}r.className='prod-search-results vis';r.innerHTML=res.map(p=>`<div class="psr-item" onclick="pickProd('${mk}','${p.id}');document.getElementById('psearch-${mk}').value='';document.getElementById('sres-${mk}').className='prod-search-results'"><div class="psr-item-name">${esc(p.name)}</div>${p.text?`<div class="psr-item-text">${esc(p.text.substring(0,50))}</div>`:''}</div>`).join('');}
 function showBCPanel(mk){document.getElementById('bc-panel-'+mk).classList.toggle('vis');document.getElementById('text-panel-'+mk).classList.remove('vis');}
 function showTextPanel(mk){document.getElementById('text-panel-'+mk).classList.toggle('vis');document.getElementById('bc-panel-'+mk).classList.remove('vis');}
@@ -225,8 +401,8 @@ function delIngr(mk,i){today.meals[mk].ingredients.splice(i,1);renderIngrList(mk
 function startScanner(mk){scannerMealKey=mk;document.getElementById('scannerOverlay').classList.add('vis');scanner=new Html5Qrcode('scannerVideo');scanner.start({facingMode:'environment'},{fps:10,qrbox:{width:280,height:160},formatsToSupport:[Html5QrcodeSupportedFormats.EAN_13,Html5QrcodeSupportedFormats.EAN_8,Html5QrcodeSupportedFormats.UPC_A,Html5QrcodeSupportedFormats.UPC_E,Html5QrcodeSupportedFormats.CODE_128]},function(code){stopScanner();document.getElementById('bc-panel-'+scannerMealKey).classList.add('vis');document.getElementById('bc-'+scannerMealKey).value=code;searchBarcode(scannerMealKey);},function(){}).catch(()=>{stopScanner();showToast('❌');});}
 function stopScanner(){document.getElementById('scannerOverlay').classList.remove('vis');if(scanner){try{scanner.stop().catch(()=>{});}catch(e){}scanner=null;}}
 async function searchBarcode(mk){const bc=document.getElementById('bc-'+mk).value.trim();if(!bc)return;const res=document.getElementById('bc-res-'+mk);res.className='bc-result vis';res.innerHTML='<div class="bc-spinner"></div>';try{const r=await fetch('https://world.openfoodfacts.org/api/v2/product/'+bc+'.json');const data=await r.json();if(data.status===1&&data.product){const p=data.product;const name=p.product_name_de||p.product_name||p.product_name_en||'?';const brand=p.brands||'';const fn=name+(brand?' ('+brand+')':'');const ingr=p.ingredients_text_de||p.ingredients_text||p.ingredients_text_en||'';if(ingr){res.className='bc-result vis found';res.dataset.name=fn;res.dataset.text=ingr;res.innerHTML=`<div style="font-size:12px;font-weight:700;color:var(--green)">✅ ${esc(fn)}</div><div style="font-size:10px;color:var(--text2);margin-top:4px;max-height:60px;overflow:hidden">${esc(ingr.substring(0,200))}</div><button class="btn btn-p btn-sm mt8" onclick="saveBCResult('${mk}')">Übernehmen</button>`;}else{res.className='bc-result vis partial';res.innerHTML=`<div style="font-size:12px;color:var(--orange)">🟡 ${esc(fn)}</div>`;}}else{res.className='bc-result vis notfound';res.innerHTML='❌ Nicht gefunden';}}catch(e){res.className='bc-result vis notfound';res.innerHTML='⚠️ Offline';}}
-function saveBCResult(mk){const res=document.getElementById('bc-res-'+mk);today.meals[mk]=today.meals[mk]||{};today.meals[mk].ingredients=today.meals[mk].ingredients||[];today.meals[mk].ingredients.push({name:res.dataset.name,text:res.dataset.text,source:'barcode'});addToDB(res.dataset.name,res.dataset.text,'barcode');document.getElementById('bc-'+mk).value='';res.className='bc-result';renderIngrList(mk);renderQuickChips(mk);scheduleDraft();showToast('✅');}
-function saveManual(mk){const name=document.getElementById('iname-'+mk).value.trim();const text=document.getElementById('itext-'+mk).value.trim();if(!name&&!text)return;today.meals[mk]=today.meals[mk]||{};today.meals[mk].ingredients=today.meals[mk].ingredients||[];today.meals[mk].ingredients.push({name:name||'Produkt',text,source:'manual'});addToDB(name||'Produkt',text,'manual');document.getElementById('iname-'+mk).value='';document.getElementById('itext-'+mk).value='';renderIngrList(mk);renderQuickChips(mk);scheduleDraft();showToast('✅');}
+function saveBCResult(mk){const res=document.getElementById('bc-res-'+mk);today.meals[mk]=today.meals[mk]||{};today.meals[mk].ingredients=today.meals[mk].ingredients||[];today.meals[mk].ingredients.push({name:res.dataset.name,text:res.dataset.text,source:'barcode'});addToDB(res.dataset.name,res.dataset.text,'barcode');document.getElementById('bc-'+mk).value='';res.className='bc-result';renderIngrList(mk);renderQuickChips(mk);scheduleDraft();showToast('✅');runDetectionForMeal(mk);}
+function saveManual(mk){const name=document.getElementById('iname-'+mk).value.trim();const text=document.getElementById('itext-'+mk).value.trim();if(!name&&!text)return;today.meals[mk]=today.meals[mk]||{};today.meals[mk].ingredients=today.meals[mk].ingredients||[];today.meals[mk].ingredients.push({name:name||'Produkt',text,source:'manual'});addToDB(name||'Produkt',text,'manual');document.getElementById('iname-'+mk).value='';document.getElementById('itext-'+mk).value='';renderIngrList(mk);renderQuickChips(mk);scheduleDraft();showToast('✅');runDetectionForMeal(mk);}
 
 function renderSwallow(){const c=document.getElementById('swallowRow');c.innerHTML='';SWALLOW.forEach(s=>{const b=document.createElement('button');b.className='emo-btn';b.textContent=s.e;b.onclick=()=>{today.swallowing=s.v;c.querySelectorAll('.emo-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');scheduleDraft();};c.appendChild(b);});}
 function renderEczema(){const c=document.getElementById('eczemaRow');c.innerHTML='';ECZEMA.forEach(s=>{const b=document.createElement('button');b.className='emo-btn';b.textContent=s.e;b.onclick=()=>{today.eczema=s.v;c.querySelectorAll('.emo-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');scheduleDraft();};c.appendChild(b);});}
@@ -245,7 +421,9 @@ function addMed(){const n=document.getElementById('nmN').value.trim();if(!n)retu
 function renderMedsConfig(){const c=document.getElementById('medsConfigBox');if(!c)return;c.innerHTML=(D.meds||[]).map((m,i)=>`<div class="med-item"><div class="med-info"><div class="med-name">${esc(m.name)}</div><div class="med-dose">${esc(m.dose)}</div></div><button class="fb-act" style="color:var(--red)" onclick="delMed(${i})">✕</button></div>`).join('');}
 function delMed(i){D.meds.splice(i,1);save();renderMedsConfig();renderMeds();}
 
-function loadDay(){const date=document.getElementById('todayDate').value;if(!date)return;updateDateUI();const saved=D.days.find(x=>x.date===date);const draft=getDraft(date);if(saved&&!saved._isDraft){today=JSON.parse(JSON.stringify(saved));showDraftBar(false);}else if(draft){today=JSON.parse(JSON.stringify(draft));showDraftBar(true);}else{today={swallowing:0,eczema:0,pain:0,textures:[],texCustom:'',meals:{},avoided:'',notes:'',meds:{},bolusEvents:[]};document.getElementById('draftBar').classList.remove('vis');}populateForm();renderReadiness();}
+function loadDay(){const date=document.getElementById('todayDate').value;if(!date)return;updateDateUI();// Clear all detection banners
+MEALS_CFG.forEach(m=>clearDetectionBanner(m.k));const saved=D.days.find(x=>x.date===date);const draft=getDraft(date);if(saved&&!saved._isDraft){today=JSON.parse(JSON.stringify(saved));showDraftBar(false);}else if(draft){today=JSON.parse(JSON.stringify(draft));showDraftBar(true);}else{today={swallowing:0,eczema:0,pain:0,textures:[],texCustom:'',meals:{},avoided:'',notes:'',meds:{},bolusEvents:[]};document.getElementById('draftBar').classList.remove('vis');}populateForm();renderReadiness();// Run detection for all meals after load
+MEALS_CFG.forEach(m=>runDetectionForMeal(m.k));}
 function populateForm(){MEALS_CFG.forEach(m=>{const md=today.meals[m.k]||{};document.getElementById('mi-'+m.k).value=md.foods||'';document.getElementById('meal-'+m.k).classList.toggle('has-data',!!(md.foods));document.getElementById('tb-'+m.k).classList.toggle('active-test',!!md.isTest);renderIngrList(m.k);renderAllergenGrid(m.k);});document.querySelectorAll('#swallowRow .emo-btn').forEach((b,i)=>b.classList.toggle('active',SWALLOW[i].v===today.swallowing));document.querySelectorAll('#eczemaRow .emo-btn').forEach((b,i)=>b.classList.toggle('active',ECZEMA[i].v===today.eczema));document.getElementById('painV').textContent=today.pain||0;document.querySelectorAll('#texChips .tex-chip').forEach(b=>{if(b.id!=='texSonstige')b.classList.toggle('active',(today.textures||[]).includes(b.textContent));});document.getElementById('texCustom').value=today.texCustom||'';if(today.texCustom)document.getElementById('texCustomWrap').classList.add('vis');else document.getElementById('texCustomWrap').classList.remove('vis');document.getElementById('avoided').value=today.avoided||'';document.getElementById('notes').value=today.notes||'';renderMeds();renderBolus();}
 function saveDay(){const date=document.getElementById('todayDate').value;if(!date)return;gatherToday();if(today.texCustom&&!(D.customTextures||[]).includes(today.texCustom)){D.customTextures=D.customTextures||[];D.customTextures.push(today.texCustom);}today.date=date;today.phase=D.currentPhase?D.currentPhase.name:'none';today.phaseFoodId=D.currentPhase?D.currentPhase.foodId:null;today.score=calcScore(today);delete today._isDraft;const idx=D.days.findIndex(x=>x.date===date);if(idx>-1)D.days[idx]=JSON.parse(JSON.stringify(today));else D.days.push(JSON.parse(JSON.stringify(today)));D.days.sort((a,b)=>a.date.localeCompare(b.date));D.meta.sinceBackup++;save();clearDraft(date);showDraftBar(false);showToast('✓ Gespeichert');updateAll();renderReadiness();}
 function calcScore(d){let s=0;s+=(Math.max(0,(d.swallowing||1)-1))*1.5;s+=Math.min(d.pain||0,3);(d.bolusEvents||[]).forEach(ev=>{if(ev.severity===1)s+=1;else if(ev.severity===2)s+=3;else if(ev.severity===3)s+=6;});s+=Math.min((d.textures||[]).length*.3,1.5);return Math.min(10,Math.round(s*10)/10);}
@@ -277,333 +455,49 @@ function updateBI(){const el=document.getElementById('backupInfo');if(!el)return
 
 async function doBackup(){if(!D.days.length){showToast('Keine Daten');return;}const filename='EOE-Backup-'+todayStr()+'.json';const content=JSON.stringify(D,null,2);await saveToFolder('backup',filename,content,'application/json');D.meta.lastBackup=new Date().toISOString();D.meta.sinceBackup=0;save();updateBackupStatus();updateBI();}
 
-// ─── HELPER: Score Mappings ───
 function mapSwallowToScore(v){return{0:null,1:0,2:4,3:7,4:10}[v]??null;}
 function mapEczemaToScore(v){return{0:null,1:0,2:4,3:7,4:10}[v]??null;}
 function getDietPhase(d){if(!d.phase||d.phase==='none')return'baseline_elimination';if(d.phase==='Recovery')return'washout';if(d.phaseFoodId&&PHASE_TO_DIET[d.phaseFoodId])return PHASE_TO_DIET[d.phaseFoodId];return'unknown';}
 function getTestFood(d){if(!d.phaseFoodId)return'none';const map={dairy:'dairy',wheat:'wheat_gluten',egg:'egg',soy:'soy',nuts:'nuts',fish:'fish_shellfish',legumes:'legumes_pea'};return map[d.phaseFoodId]||'other';}
 function getDayAllergens(d){const all=new Set();MEALS_CFG.forEach(m=>{const meal=(d.meals||{})[m.k];if(meal&&meal.allergens){meal.allergens.forEach(a=>all.add(a));}});return all;}
-function hasAllergen(d,id){return getDayAllergens(d).has(id);}
 function countAllergenServings(d,id){let count=0;MEALS_CFG.forEach(m=>{const meal=(d.meals||{})[m.k];if(meal&&meal.allergens&&meal.allergens.includes(id))count++;});return count;}
 function getMealTime(d,mealKey){return MEALS_CFG.find(m=>m.k===mealKey)?.time||'12:00';}
 function getDayTextureFlags(d){const tx=d.textures||[];return{dry_meat:tx.includes('Trockenes Fleisch')?1:0,tough_meat:tx.includes('Trockenes Fleisch')?1:0,dense_bread:tx.includes('Brot/Toast')?1:0,sticky_rice:tx.includes('Reis')?1:0,dry_or_dense_food:tx.length>0?1:0};}
+function normalizeFoodName(name){if(!name)return'unknown';return name.toLowerCase().trim().replace(/[äöüß]/g,c=>({'ä':'ae','ö':'oe','ü':'ue','ß':'ss'}[c])).replace(/[^a-z0-9_\s-]/g,'').replace(/\s+/g,'_').substring(0,80);}
 
-// ─── XLSX EXPORT ───
 async function exportXLSX(){
     if(!D.days.length){showToast('Keine Daten');return;}
     if(typeof XLSX==='undefined'){showToast('⚠️ XLSX-Library nicht geladen');return;}
-
     const wb=XLSX.utils.book_new();
-
-    // Sheet 1: README
-    const readmeData=[
-        ['field','value'],
-        ['workbook_purpose','Track foods, symptoms, EoE events, eczema flares, medications, and confounders to identify possible triggers'],
-        ['patient_condition','Eosinophilic esophagitis and eczema'],
-        ['date_format','YYYY-MM-DD'],
-        ['time_format','HH:MM'],
-        ['boolean_encoding','1=yes, 0=no, blank=unknown'],
-        ['symptom_score_scale','0=none, 10=worst imaginable'],
-        ['primary_analysis_goal','Identify possible food, texture, medication, and environmental associations with EoE symptoms, bolus events, and eczema flares'],
-        ['important_warning','Symptoms alone cannot confirm EoE inflammation; medical/endoscopic evaluation may be required'],
-        ['workbook_version','1.0'],
-        ['generated_at',new Date().toISOString()],
-        ['days_in_log',D.days.length],
-        ['current_phase',D.currentPhase?D.currentPhase.name:'none'],
-        ['allergen_tagging_method','User-tagged per meal (multi-select). Reflects actual exposure including unintentional exposure when eating out.']
-    ];
-    const wsReadme=XLSX.utils.aoa_to_sheet(readmeData);
-    XLSX.utils.book_append_sheet(wb,wsReadme,'README');
-
-    // Sheet 2: daily_log
+    const readmeData=[['field','value'],['workbook_purpose','Track foods, symptoms, EoE events, eczema flares, medications, and confounders to identify possible triggers'],['patient_condition','Eosinophilic esophagitis and eczema'],['date_format','YYYY-MM-DD'],['time_format','HH:MM'],['boolean_encoding','1=yes, 0=no, blank=unknown'],['symptom_score_scale','0=none, 10=worst imaginable'],['primary_analysis_goal','Identify possible food, texture, medication, and environmental associations with EoE symptoms, bolus events, and eczema flares'],['important_warning','Symptoms alone cannot confirm EoE inflammation; medical/endoscopic evaluation may be required'],['workbook_version','1.0'],['generated_at',new Date().toISOString()],['days_in_log',D.days.length],['current_phase',D.currentPhase?D.currentPhase.name:'none'],['allergen_tagging_method','User-tagged per meal (multi-select). Auto-detection suggests tags but user confirms. Reflects actual exposure including unintentional exposure when eating out.']];
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(readmeData),'README');
     const dailyHeaders=['date','diet_phase','test_food','test_day_number','intentional_challenge','accidental_exposure','breakfast','lunch','dinner','snacks','drinks','dairy','dairy_servings','wheat_gluten','wheat_gluten_servings','egg','egg_servings','soy','soy_servings','legumes_pea','legumes_pea_servings','nuts','fish_shellfish','oats','corn','rice','potato','tomato','beef','pork','chicken','lamb','processed_meat','high_sugar','alcohol','coffee_caffeine','spicy_food','dry_meat','tough_meat','dense_bread','sticky_rice','dry_or_dense_food','ate_fast','large_bites','meal_moisture','eoe_score','swallow_score','bolus_event','food_stuck_minutes','reflux_score','chest_pain_score','throat_tightness_score','nausea_score','abdominal_pain_score','eczema_score','itch_score','eczema_locations','eczema_flare_started_today','ppi_taken','ppi_name','ppi_dose_mg','swallowed_steroid_taken','swallowed_steroid_name','antihistamine_taken','antihistamine_name','topical_steroid_eczema','moisturiser_used','other_medication','stress_score','sleep_hours','illness','exercise_sweat','pollen_high','dust_exposure','pet_exposure','new_soap_detergent','weather_dry_cold','bowel_changes','weight_kg','notes'];
-
     const dailyRows=[dailyHeaders];
-    D.days.forEach(d=>{
-        const allergens=getDayAllergens(d);
-        const textureFlags=getDayTextureFlags(d);
-        const isTestDay=Object.values(d.meals||{}).some(m=>m&&m.isTest);
-        const phaseStartDate=D.phases.find(p=>p.name===d.phase)?.startDate||(D.currentPhase&&d.phase===D.currentPhase.name?D.currentPhase.startDate:null);
-        const testDayNum=phaseStartDate?Math.floor((new Date(d.date)-new Date(phaseStartDate))/86400000)+1:'';
-
-        // Find test food allergen + accidental exposure detection
-        const testFoodId=d.phaseFoodId;
-        const testFoodAllergen=ALLERGEN_TAGS.find(a=>a.phaseId===testFoodId)?.id;
-        const consumedTestFood=testFoodAllergen?allergens.has(testFoodAllergen):false;
-        const otherAllergens=Array.from(allergens).filter(a=>a!==testFoodAllergen);
-        const accidentalExposure=otherAllergens.length>0?1:0;
-
-        // Bolus
-        const bolusEvent=(d.bolusEvents||[]).length>0?1:0;
-        const bolusMaxDur=Math.max(0,...(d.bolusEvents||[]).map(b=>b.duration||0));
-
-        // Meds
-        const meds=d.meds||{};
-        const ppiTaken=(meds.lansoprazole&&meds.lansoprazole.count>0)?1:0;
-        const evohalerTaken=(meds.evohaler&&meds.evohaler.count>0)?1:0;
-        const betnovateTaken=(meds.betnovate&&meds.betnovate.count>0)?1:0;
-        const otherMeds=Object.entries(meds).filter(([id,v])=>!['lansoprazole','evohaler','betnovate'].includes(id)&&v.count>0).map(([id,v])=>{const m=D.meds.find(x=>x.id===id);return m?m.name+'('+v.count+')':id;}).join('; ');
-
-        // Meals
-        const mealText=k=>{const m=(d.meals||{})[k];if(!m||!m.foods)return'';return m.foods+(m.ingredients&&m.ingredients.length?' ['+m.ingredients.map(i=>i.name).join(', ')+']':'');};
-
-        const row=[
-            d.date,
-            getDietPhase(d),
-            getTestFood(d),
-            testDayNum||'',
-            isTestDay?1:0,
-            accidentalExposure,
-            mealText('breakfast'),
-            mealText('lunch'),
-            mealText('dinner'),
-            mealText('other'),
-            '', // drinks - separate column not used
-            // Allergen booleans + servings
-            allergens.has('dairy')?1:0,countAllergenServings(d,'dairy')||'',
-            allergens.has('wheat_gluten')?1:0,countAllergenServings(d,'wheat_gluten')||'',
-            allergens.has('egg')?1:0,countAllergenServings(d,'egg')||'',
-            allergens.has('soy')?1:0,countAllergenServings(d,'soy')||'',
-            allergens.has('legumes_pea')?1:0,countAllergenServings(d,'legumes_pea')||'',
-            allergens.has('nuts')?1:0,
-            allergens.has('fish_shellfish')?1:0,
-            allergens.has('oats')?1:0,
-            allergens.has('corn')?1:0,
-            allergens.has('rice')?1:0,
-            allergens.has('potato')?1:0,
-            allergens.has('tomato')?1:0,
-            '','','','','', // beef, pork, chicken, lamb, processed_meat (not tracked)
-            allergens.has('high_sugar')?1:0,
-            '','','', // alcohol, coffee, spicy (not tracked)
-            // Textures
-            textureFlags.dry_meat,textureFlags.tough_meat,textureFlags.dense_bread,textureFlags.sticky_rice,textureFlags.dry_or_dense_food,
-            '','', // ate_fast, large_bites
-            '', // meal_moisture (not tracked yet)
-            // EOE Symptoms
-            d.score!=null?d.score:'',
-            mapSwallowToScore(d.swallowing)??'',
-            bolusEvent,
-            bolusEvent?bolusMaxDur:0,
-            '','','','','', // reflux, chest_pain, throat_tight, nausea, abdominal_pain
-            // Eczema
-            mapEczemaToScore(d.eczema)??'',
-            '','','', // itch, eczema_locations, eczema_flare_started
-            // Meds
-            ppiTaken,ppiTaken?'Lansoprazole':'',ppiTaken?15:'',
-            evohalerTaken,evohalerTaken?'Evohaler':'',
-            '','', // antihistamine
-            betnovateTaken,'',otherMeds||'',
-            // Confounders (not tracked)
-            '','','','','','','','','',
-            // Misc
-            '','',
-            d.notes||''
-        ];
-        dailyRows.push(row);
-    });
-    const wsDaily=XLSX.utils.aoa_to_sheet(dailyRows);
-    XLSX.utils.book_append_sheet(wb,wsDaily,'daily_log');
-
-    // Sheet 3: food_events (one row per ingredient, fallback to one row per meal)
+    D.days.forEach(d=>{const allergens=getDayAllergens(d);const textureFlags=getDayTextureFlags(d);const isTestDay=Object.values(d.meals||{}).some(m=>m&&m.isTest);const phaseStartDate=D.phases.find(p=>p.name===d.phase)?.startDate||(D.currentPhase&&d.phase===D.currentPhase.name?D.currentPhase.startDate:null);const testDayNum=phaseStartDate?Math.floor((new Date(d.date)-new Date(phaseStartDate))/86400000)+1:'';const testFoodId=d.phaseFoodId;const testFoodAllergen=ALLERGEN_TAGS.find(a=>a.phaseId===testFoodId)?.id;const otherAllergens=Array.from(allergens).filter(a=>a!==testFoodAllergen);const accidentalExposure=otherAllergens.length>0?1:0;const bolusEvent=(d.bolusEvents||[]).length>0?1:0;const bolusMaxDur=Math.max(0,...(d.bolusEvents||[]).map(b=>b.duration||0));const meds=d.meds||{};const ppiTaken=(meds.lansoprazole&&meds.lansoprazole.count>0)?1:0;const evohalerTaken=(meds.evohaler&&meds.evohaler.count>0)?1:0;const betnovateTaken=(meds.betnovate&&meds.betnovate.count>0)?1:0;const otherMeds=Object.entries(meds).filter(([id,v])=>!['lansoprazole','evohaler','betnovate'].includes(id)&&v.count>0).map(([id,v])=>{const m=D.meds.find(x=>x.id===id);return m?m.name+'('+v.count+')':id;}).join('; ');const mealText=k=>{const m=(d.meals||{})[k];if(!m||!m.foods)return'';return m.foods+(m.ingredients&&m.ingredients.length?' ['+m.ingredients.map(i=>i.name).join(', ')+']':'');};dailyRows.push([d.date,getDietPhase(d),getTestFood(d),testDayNum||'',isTestDay?1:0,accidentalExposure,mealText('breakfast'),mealText('lunch'),mealText('dinner'),mealText('other'),'',allergens.has('dairy')?1:0,countAllergenServings(d,'dairy')||'',allergens.has('wheat_gluten')?1:0,countAllergenServings(d,'wheat_gluten')||'',allergens.has('egg')?1:0,countAllergenServings(d,'egg')||'',allergens.has('soy')?1:0,countAllergenServings(d,'soy')||'',allergens.has('legumes_pea')?1:0,countAllergenServings(d,'legumes_pea')||'',allergens.has('nuts')?1:0,allergens.has('fish_shellfish')?1:0,allergens.has('oats')?1:0,allergens.has('corn')?1:0,allergens.has('rice')?1:0,allergens.has('potato')?1:0,allergens.has('tomato')?1:0,'','','','','',allergens.has('high_sugar')?1:0,'','','',textureFlags.dry_meat,textureFlags.tough_meat,textureFlags.dense_bread,textureFlags.sticky_rice,textureFlags.dry_or_dense_food,'','','',d.score!=null?d.score:'',mapSwallowToScore(d.swallowing)??'',bolusEvent,bolusEvent?bolusMaxDur:0,'','','','','',mapEczemaToScore(d.eczema)??'','','','',ppiTaken,ppiTaken?'Lansoprazole':'',ppiTaken?15:'',evohalerTaken,evohalerTaken?'Evohaler':'','','',betnovateTaken,'',otherMeds||'','','','','','','','','','','','',d.notes||'']);});
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(dailyRows),'daily_log');
     const foodHeaders=['date','time','meal','food_name','amount','unit','brand','homemade','processed_food','ingredients_known','contains_dairy','contains_wheat_gluten','contains_egg','contains_soy','contains_legumes_pea','contains_nuts','contains_fish_shellfish','contains_oats','contains_corn','contains_rice','contains_potato','contains_tomato','contains_high_sugar','protein_type','texture','temperature','meal_moisture','suspected_cross_contamination','may_contain_traces','notes'];
     const foodRows=[foodHeaders];
-    D.days.forEach(d=>{
-        MEALS_CFG.forEach(m=>{
-            const meal=(d.meals||{})[m.k];
-            if(!meal||(!meal.foods&&!(meal.ingredients&&meal.ingredients.length)))return;
-            const allergens=meal.allergens||[];
-            const has=id=>allergens.includes(id)?1:0;
-            const time=getMealTime(d,m.k);
-
-            // If we have ingredients, one row per ingredient; otherwise one row for meal
-            const ingredients=meal.ingredients||[];
-            if(ingredients.length>0){
-                ingredients.forEach(ing=>{
-                    foodRows.push([
-                        d.date,time,m.k==='other'?'snack':m.k,
-                        normalizeFoodName(ing.name),
-                        '','serving',ing.brand||'',
-                        '', // homemade unknown
-                        ing.source==='barcode'?1:'',
-                        ing.text?1:0,
-                        has('dairy'),has('wheat_gluten'),has('egg'),has('soy'),has('legumes_pea'),has('nuts'),has('fish_shellfish'),has('oats'),has('corn'),has('rice'),has('potato'),has('tomato'),has('high_sugar'),
-                        '','','','','','', // protein_type, texture, temp, moisture, contamination, traces
-                        ing.text?ing.text.substring(0,200):''
-                    ]);
-                });
-            }else{
-                // Fallback: one row per meal
-                foodRows.push([
-                    d.date,time,m.k==='other'?'snack':m.k,
-                    normalizeFoodName(meal.foods),
-                    '','serving','',
-                    '','','',
-                    has('dairy'),has('wheat_gluten'),has('egg'),has('soy'),has('legumes_pea'),has('nuts'),has('fish_shellfish'),has('oats'),has('corn'),has('rice'),has('potato'),has('tomato'),has('high_sugar'),
-                    '','','','','','',
-                    meal.foods||''
-                ]);
-            }
-        });
-    });
-    const wsFoods=XLSX.utils.aoa_to_sheet(foodRows);
-    XLSX.utils.book_append_sheet(wb,wsFoods,'food_events');
-
-    // Sheet 4: food_catalog
+    D.days.forEach(d=>{MEALS_CFG.forEach(m=>{const meal=(d.meals||{})[m.k];if(!meal||(!meal.foods&&!(meal.ingredients&&meal.ingredients.length)))return;const allergens=meal.allergens||[];const has=id=>allergens.includes(id)?1:0;const time=getMealTime(d,m.k);const ingredients=meal.ingredients||[];if(ingredients.length>0){ingredients.forEach(ing=>{foodRows.push([d.date,time,m.k==='other'?'snack':m.k,normalizeFoodName(ing.name),'','serving',ing.brand||'','',ing.source==='barcode'?1:'',ing.text?1:0,has('dairy'),has('wheat_gluten'),has('egg'),has('soy'),has('legumes_pea'),has('nuts'),has('fish_shellfish'),has('oats'),has('corn'),has('rice'),has('potato'),has('tomato'),has('high_sugar'),'','','','','','',ing.text?ing.text.substring(0,200):'']);});}else{foodRows.push([d.date,time,m.k==='other'?'snack':m.k,normalizeFoodName(meal.foods),'','serving','','','','',has('dairy'),has('wheat_gluten'),has('egg'),has('soy'),has('legumes_pea'),has('nuts'),has('fish_shellfish'),has('oats'),has('corn'),has('rice'),has('potato'),has('tomato'),has('high_sugar'),'','','','','','',meal.foods||'']);}});});
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(foodRows),'food_events');
     const catHeaders=['food_name','brand','category','processed_food','dairy','wheat_gluten','egg','soy','legumes_pea','nuts','fish_shellfish','oats','corn','rice','potato','tomato','high_sugar','typical_texture','typical_moisture','ingredients','may_contain_traces','notes'];
     const catRows=[catHeaders];
-    (D.products||[]).forEach(p=>{
-        const text=(p.text||'').toLowerCase();
-        const detect=kw=>kw.test(text)?1:0;
-        catRows.push([
-            normalizeFoodName(p.name),
-            '', // brand parsing not reliable
-            'unknown',
-            p.source==='barcode'?1:'',
-            detect(/milch|joghurt|käse|butter|sahne|yogurt|milk|cheese|cream|kefir|quark/),
-            detect(/weizen|wheat|brot|pasta|nudeln|gluten|mehl|flour/),
-            detect(/\bei\b|eier|egg|eiweiß|eigelb/),
-            detect(/soja|soy|tofu|tempeh|edamame/),
-            detect(/erbse|pea|linse|lentil|kicher|chickpea|bohne|bean/),
-            detect(/nuss|nüsse|mandel|almond|walnut|cashew|hazel|haselnuss|pistazie/),
-            detect(/fisch|fish|lachs|salmon|thunfisch|tuna|krabben|shrimp/),
-            detect(/hafer|oat/),
-            detect(/mais|corn/),
-            detect(/reis|rice/),
-            detect(/kartoffel|potato/),
-            detect(/tomate|tomato/),
-            detect(/zucker|sugar|sirup|syrup|honig|honey/),
-            'unknown','unknown',
-            (p.text||'').substring(0,500),
-            '','Used '+(p.usageCount||1)+'x'
-        ]);
-    });
-    const wsCat=XLSX.utils.aoa_to_sheet(catRows);
-    XLSX.utils.book_append_sheet(wb,wsCat,'food_catalog');
-
-    // Sheet 5: symptom_events (from bolus events)
+    (D.products||[]).forEach(p=>{const text=(p.text||'').toLowerCase();const detected=detectAllergensInText(text);const has=id=>detected.includes(id)?1:0;catRows.push([normalizeFoodName(p.name),'','unknown',p.source==='barcode'?1:'',has('dairy'),has('wheat_gluten'),has('egg'),has('soy'),has('legumes_pea'),has('nuts'),has('fish_shellfish'),has('oats'),has('corn'),has('rice'),has('potato'),has('tomato'),has('high_sugar'),'unknown','unknown',(p.text||'').substring(0,500),'','Used '+(p.usageCount||1)+'x']);});
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(catRows),'food_catalog');
     const symHeaders=['date','time','event_type','severity','duration_minutes','related_meal','suspected_food','suspected_texture','required_medical_help','could_swallow_saliva','vomiting_or_regurgitation','resolved_spontaneously','medication_used','notes'];
     const symRows=[symHeaders];
-    D.days.forEach(d=>{
-        (d.bolusEvents||[]).forEach((ev,i)=>{
-            const sevMap={1:3,2:6,3:9};
-            const resolved=ev.resolve||[];
-            symRows.push([
-                d.date,
-                '', // time not tracked per event
-                'bolus',
-                sevMap[ev.severity]||'',
-                ev.duration||'',
-                '', // related_meal
-                normalizeFoodName(ev.food||''),
-                '', // suspected_texture
-                resolved.includes('🏥 Notaufnahme')?1:0,
-                '', // could_swallow_saliva
-                resolved.includes('🤮 Würgen')||resolved.includes('↩️ Regurgitation')?1:0,
-                resolved.includes('⏰ Warten')?1:0,
-                resolved.includes('💧 Wasser')?'water':'',
-                resolved.map(r=>BOLUS_RESOLVE_EN[r]||r).join('; ')
-            ]);
-        });
-        // Also add eczema flare events for severe days
-        if(d.eczema>=3){
-            symRows.push([d.date,'','eczema_flare',mapEczemaToScore(d.eczema),'','','','','','','','','',d.notes||'']);
-        }
-    });
-    const wsSym=XLSX.utils.aoa_to_sheet(symRows);
-    XLSX.utils.book_append_sheet(wb,wsSym,'symptom_events');
-
-    // Sheet 6: data_dictionary
-    const dictData=[
-        ['sheet_name','column_name','data_type','allowed_values','unit','missing_value_meaning','description'],
-        ['daily_log','date','date','YYYY-MM-DD','date','not allowed','Calendar date of diary entry'],
-        ['daily_log','diet_phase','enum','baseline_elimination, dairy_challenge, wheat_gluten_challenge, egg_challenge, soy_challenge, legumes_pea_challenge, nuts_challenge, fish_shellfish_challenge, washout, normal_diet, unknown','none','unknown','Current dietary phase'],
-        ['daily_log','test_food','enum','none, dairy, wheat_gluten, egg, soy, legumes_pea, nuts, fish_shellfish, oats, corn, rice, other, unknown','none','unknown/not recorded','Food currently being challenged'],
-        ['daily_log','test_day_number','number','1,2,3...','day','unknown','Day number within current test phase'],
-        ['daily_log','intentional_challenge','binary','0,1','none','unknown','Whether user intentionally consumed the test food that day'],
-        ['daily_log','accidental_exposure','binary','0,1','none','unknown','Whether user consumed unintended allergens (e.g. when eating out)'],
-        ['daily_log','breakfast','text','free text','none','unknown','Description of breakfast'],
-        ['daily_log','lunch','text','free text','none','unknown','Description of lunch'],
-        ['daily_log','dinner','text','free text','none','unknown','Description of dinner'],
-        ['daily_log','snacks','text','free text','none','unknown','Description of snacks/other meals'],
-        ['daily_log','dairy','binary','0,1','none','unknown','Whether dairy was consumed (user-tagged)'],
-        ['daily_log','dairy_servings','number','0,1,2,3...','meal_count','unknown','Number of meals containing dairy'],
-        ['daily_log','wheat_gluten','binary','0,1','none','unknown','Whether wheat/gluten was consumed (user-tagged)'],
-        ['daily_log','egg','binary','0,1','none','unknown','Whether egg was consumed (user-tagged)'],
-        ['daily_log','soy','binary','0,1','none','unknown','Whether soy was consumed (user-tagged)'],
-        ['daily_log','legumes_pea','binary','0,1','none','unknown','Whether legumes/peas were consumed'],
-        ['daily_log','nuts','binary','0,1','none','unknown','Whether nuts were consumed'],
-        ['daily_log','fish_shellfish','binary','0,1','none','unknown','Whether fish/shellfish was consumed'],
-        ['daily_log','dry_meat','binary','0,1','none','unknown','Whether dry/tough meat was consumed (texture flag)'],
-        ['daily_log','dense_bread','binary','0,1','none','unknown','Whether dense bread was consumed (texture flag)'],
-        ['daily_log','sticky_rice','binary','0,1','none','unknown','Whether sticky rice was consumed (texture flag)'],
-        ['daily_log','dry_or_dense_food','binary','0,1','none','unknown','Whether any dry/dense food was reported'],
-        ['daily_log','eoe_score','number','0-10','severity','unknown','Overall computed EoE symptom severity for the day'],
-        ['daily_log','swallow_score','number','0-10','severity','unknown','Swallowing difficulty (mapped from 1-4 scale: 1→0, 2→4, 3→7, 4→10)'],
-        ['daily_log','bolus_event','binary','0,1','none','unknown','Whether food got stuck or nearly stuck that day'],
-        ['daily_log','food_stuck_minutes','number','0,5,15,30...','minutes','unknown','Duration of bolus event (max if multiple)'],
-        ['daily_log','eczema_score','number','0-10','severity','unknown','Eczema severity (mapped from 1-4 scale)'],
-        ['daily_log','ppi_taken','binary','0,1','none','unknown','Whether PPI was taken'],
-        ['daily_log','ppi_name','text','Lansoprazole, Omeprazole, etc.','none','unknown','Name of PPI'],
-        ['daily_log','ppi_dose_mg','number','15,30,40...','mg','unknown','PPI dose'],
-        ['daily_log','swallowed_steroid_taken','binary','0,1','none','unknown','Whether swallowed steroid (e.g. Evohaler) was used'],
-        ['daily_log','topical_steroid_eczema','binary','0,1','none','unknown','Whether topical steroid for eczema was used'],
-        ['daily_log','other_medication','text','free text','none','unknown','Other medications taken'],
-        ['daily_log','notes','text','free text','none','unknown','Free-text daily notes'],
-        ['food_events','date','date','YYYY-MM-DD','date','not allowed','Date food was consumed'],
-        ['food_events','time','time','HH:MM','time','unknown','Approximate time of meal'],
-        ['food_events','meal','enum','breakfast, lunch, dinner, snack, drink, other, unknown','none','unknown','Meal category'],
-        ['food_events','food_name','text','normalized_food_name','none','unknown','Standardized name of food/ingredient'],
-        ['food_events','contains_dairy','binary','0,1','none','unknown','Whether the meal contained dairy (from user tags)'],
-        ['food_events','contains_wheat_gluten','binary','0,1','none','unknown','Whether the meal contained wheat/gluten'],
-        ['food_events','contains_egg','binary','0,1','none','unknown','Whether the meal contained egg'],
-        ['food_events','contains_soy','binary','0,1','none','unknown','Whether the meal contained soy'],
-        ['food_events','contains_nuts','binary','0,1','none','unknown','Whether the meal contained nuts'],
-        ['food_events','processed_food','binary','0,1','none','unknown','Whether the food is processed (1=barcode-scanned product)'],
-        ['food_events','notes','text','free text','none','unknown','Ingredient list or notes'],
-        ['food_catalog','food_name','text','normalized_food_name','none','unknown','Standardized name of recurring food'],
-        ['food_catalog','category','enum','dairy, grain, meat, fish_shellfish, vegetable, fruit, snack, sweet, drink, sauce, processed_food, other, unknown','none','unknown','Food category'],
-        ['food_catalog','processed_food','binary','0,1','none','unknown','Whether item is a processed product'],
-        ['food_catalog','ingredients','text','comma-separated ingredient list','none','unknown','Original ingredient list from product label'],
-        ['symptom_events','date','date','YYYY-MM-DD','date','not allowed','Date of symptom event'],
-        ['symptom_events','event_type','enum','dysphagia, bolus, reflux, chest_pain, throat_tightness, eczema_flare, itching, nausea, abdominal_pain, other, unknown','none','unknown','Type of symptom event'],
-        ['symptom_events','severity','number','0-10','severity','unknown','Severity score'],
-        ['symptom_events','duration_minutes','number','0,5,15...','minutes','unknown','Duration of event'],
-        ['symptom_events','suspected_food','text','normalized_food_name','none','unknown','Food suspected of causing event'],
-        ['symptom_events','vomiting_or_regurgitation','binary','0,1','none','unknown','Whether vomiting/regurgitation occurred'],
-        ['symptom_events','resolved_spontaneously','binary','0,1','none','unknown','Whether resolved without intervention'],
-        ['symptom_events','medication_used','text','free text','none','unknown','Medication used during event']
-    ];
-    const wsDict=XLSX.utils.aoa_to_sheet(dictData);
-    XLSX.utils.book_append_sheet(wb,wsDict,'data_dictionary');
-
-    // Generate XLSX
+    D.days.forEach(d=>{(d.bolusEvents||[]).forEach((ev,i)=>{const sevMap={1:3,2:6,3:9};const resolved=ev.resolve||[];symRows.push([d.date,'','bolus',sevMap[ev.severity]||'',ev.duration||'','',normalizeFoodName(ev.food||''),'',resolved.includes('🏥 Notaufnahme')?1:0,'',resolved.includes('🤮 Würgen')||resolved.includes('↩️ Regurgitation')?1:0,resolved.includes('⏰ Warten')?1:0,resolved.includes('💧 Wasser')?'water':'',resolved.map(r=>BOLUS_RESOLVE_EN[r]||r).join('; ')]);});if(d.eczema>=3){symRows.push([d.date,'','eczema_flare',mapEczemaToScore(d.eczema),'','','','','','','','','',d.notes||'']);}});
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(symRows),'symptom_events');
+    const dictData=[['sheet_name','column_name','data_type','allowed_values','unit','missing_value_meaning','description'],['daily_log','date','date','YYYY-MM-DD','date','not allowed','Calendar date of diary entry'],['daily_log','diet_phase','enum','baseline_elimination, dairy_challenge, wheat_gluten_challenge, egg_challenge, soy_challenge, legumes_pea_challenge, nuts_challenge, fish_shellfish_challenge, washout, normal_diet, unknown','none','unknown','Current dietary phase'],['daily_log','test_food','enum','none, dairy, wheat_gluten, egg, soy, legumes_pea, nuts, fish_shellfish, other, unknown','none','unknown','Food currently being challenged'],['daily_log','test_day_number','number','1,2,3...','day','unknown','Day within current test phase'],['daily_log','intentional_challenge','binary','0,1','none','unknown','User intentionally consumed test food'],['daily_log','accidental_exposure','binary','0,1','none','unknown','User consumed unintended allergens'],['daily_log','dairy','binary','0,1','none','unknown','Dairy consumed (user-tagged, AI-suggested)'],['daily_log','dairy_servings','number','0,1,2,3...','meal_count','unknown','Number of meals containing dairy'],['daily_log','wheat_gluten','binary','0,1','none','unknown','Wheat/gluten consumed'],['daily_log','egg','binary','0,1','none','unknown','Egg consumed'],['daily_log','soy','binary','0,1','none','unknown','Soy consumed'],['daily_log','legumes_pea','binary','0,1','none','unknown','Legumes/peas consumed'],['daily_log','nuts','binary','0,1','none','unknown','Nuts consumed'],['daily_log','fish_shellfish','binary','0,1','none','unknown','Fish/shellfish consumed'],['daily_log','dry_meat','binary','0,1','none','unknown','Dry/tough meat (texture flag)'],['daily_log','dense_bread','binary','0,1','none','unknown','Dense bread (texture flag)'],['daily_log','sticky_rice','binary','0,1','none','unknown','Sticky rice (texture flag)'],['daily_log','eoe_score','number','0-10','severity','unknown','Computed EoE symptom severity'],['daily_log','swallow_score','number','0-10','severity','unknown','Swallowing difficulty (mapped from 1-4: 1→0, 2→4, 3→7, 4→10)'],['daily_log','bolus_event','binary','0,1','none','unknown','Food got stuck or nearly stuck'],['daily_log','food_stuck_minutes','number','0,5,15,30...','minutes','unknown','Duration of bolus event'],['daily_log','eczema_score','number','0-10','severity','unknown','Eczema severity (mapped from 1-4)'],['daily_log','ppi_taken','binary','0,1','none','unknown','PPI taken'],['daily_log','swallowed_steroid_taken','binary','0,1','none','unknown','Swallowed steroid (e.g. Evohaler)'],['daily_log','topical_steroid_eczema','binary','0,1','none','unknown','Topical steroid for eczema'],['daily_log','notes','text','free text','none','unknown','Free-text notes'],['food_events','date','date','YYYY-MM-DD','date','not allowed','Date'],['food_events','time','time','HH:MM','time','unknown','Approximate meal time'],['food_events','meal','enum','breakfast, lunch, dinner, snack, drink, other, unknown','none','unknown','Meal category'],['food_events','food_name','text','normalized','none','unknown','Standardized food name'],['food_events','contains_dairy','binary','0,1','none','unknown','Contains dairy (user-tagged, multi-select)'],['food_events','contains_wheat_gluten','binary','0,1','none','unknown','Contains wheat/gluten'],['food_events','contains_egg','binary','0,1','none','unknown','Contains egg'],['food_events','contains_soy','binary','0,1','none','unknown','Contains soy'],['food_events','contains_nuts','binary','0,1','none','unknown','Contains nuts'],['food_events','processed_food','binary','0,1','none','unknown','Processed product (1=barcode-scanned)'],['food_catalog','food_name','text','normalized','none','unknown','Standardized recurring food name'],['food_catalog','category','enum','dairy, grain, meat, fish_shellfish, vegetable, fruit, snack, sweet, drink, sauce, processed_food, other, unknown','none','unknown','Category'],['food_catalog','ingredients','text','comma-separated','none','unknown','Ingredient list'],['symptom_events','date','date','YYYY-MM-DD','date','not allowed','Event date'],['symptom_events','event_type','enum','dysphagia, bolus, reflux, chest_pain, eczema_flare, itching, nausea, abdominal_pain, other, unknown','none','unknown','Event type'],['symptom_events','severity','number','0-10','severity','unknown','Severity'],['symptom_events','duration_minutes','number','0,5,15...','minutes','unknown','Duration'],['symptom_events','suspected_food','text','normalized','none','unknown','Suspected food'],['symptom_events','vomiting_or_regurgitation','binary','0,1','none','unknown','Vomiting/regurgitation occurred'],['symptom_events','resolved_spontaneously','binary','0,1','none','unknown','Resolved without intervention']];
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(dictData),'data_dictionary');
     const wbout=XLSX.write(wb,{bookType:'xlsx',type:'array'});
     const blob=new Blob([wbout],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
     const filename='eoe_eczema_diary_'+todayStr()+'.xlsx';
-
-    // Save via folder API or download
     const handle=folderHandles.csv;
-    if(handle&&FSA_SUPPORTED){
-        const ok=await verifyPermission(handle);
-        if(ok){
-            try{
-                const fileHandle=await handle.getFileHandle(filename,{create:true});
-                const writable=await fileHandle.createWritable();
-                await writable.write(blob);
-                await writable.close();
-                showToast('✅ '+filename+' → '+handle.name);
-                return;
-            }catch(e){console.error(e);}
-        }
-    }
-    dl(blob,filename);
-    showToast('📥 '+filename);
+    if(handle&&FSA_SUPPORTED){const ok=await verifyPermission(handle);if(ok){try{const fileHandle=await handle.getFileHandle(filename,{create:true});const writable=await fileHandle.createWritable();await writable.write(blob);await writable.close();showToast('✅ '+filename+' → '+handle.name);return;}catch(e){console.error(e);}}}
+    dl(blob,filename);showToast('📥 '+filename);
 }
 
-function normalizeFoodName(name){if(!name)return'unknown';return name.toLowerCase().trim().replace(/[äöüß]/g,c=>({'ä':'ae','ö':'oe','ü':'ue','ß':'ss'}[c])).replace(/[^a-z0-9_\s-]/g,'').replace(/\s+/g,'_').substring(0,80);}
-
-// Legacy CSV
-async function exportCSV(){if(!D.days.length){showToast('Keine Daten');return;}const medCols=D.meds.map(m=>m.name.replace(/[^a-zA-Z0-9]/g,'_'));const headers=['Date','Phase','Score','Swallowing','Eczema','Pain','Bolus_Count','Notes'];const rows=D.days.map(d=>[d.date,d.phase||'none',d.score||0,d.swallowing||0,d.eczema||0,d.pain||0,(d.bolusEvents||[]).length,(d.notes||'').replace(/\n/g,' ')]);const csv=[headers,...rows].map(r=>r.map(c=>'"'+String(c==null?'':c).replace(/"/g,"'")+'"').join(',')).join('\n');const filename='EOE-Legacy-CSV-'+todayStr()+'.csv';await saveToFolder('csv',filename,'\ufeff'+csv,'text/csv;charset=utf-8');}
+async function exportCSV(){if(!D.days.length){showToast('Keine Daten');return;}const headers=['Date','Phase','Score','Swallowing','Eczema','Pain','Bolus_Count','Notes'];const rows=D.days.map(d=>[d.date,d.phase||'none',d.score||0,d.swallowing||0,d.eczema||0,d.pain||0,(d.bolusEvents||[]).length,(d.notes||'').replace(/\n/g,' ')]);const csv=[headers,...rows].map(r=>r.map(c=>'"'+String(c==null?'':c).replace(/"/g,"'")+'"').join(',')).join('\n');const filename='EOE-Legacy-CSV-'+todayStr()+'.csv';await saveToFolder('csv',filename,'\ufeff'+csv,'text/csv;charset=utf-8');}
 
 function clearAll(){if(!confirm('ALLE Daten löschen?'))return;D={days:[],foods:DEFAULT_FOODS.map(f=>({...f,status:'queue',testHistory:[]})),phases:[],currentPhase:null,meds:DEFAULT_MEDS.slice(),customTextures:[],products:[],meta:{lastBackup:null,sinceBackup:0}};save();renderMeals();renderSwallow();renderEczema();renderTextures();document.getElementById('todayDate').value=todayStr();loadDay();updateAll();showToast('✓');}
 function updateAll(){updateHeader();updateBackupStatus();renderReadiness();}
@@ -620,3 +514,4 @@ init();
 </script>
 </body>
 </html>
+
